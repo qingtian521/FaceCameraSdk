@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <ImageView
+        android:id="@+id/iv_people_head"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@mipmap/ic_launcher"
+        android:layout_centerVertical="true"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toRightOf="@id/iv_people_head"
+        android:layout_centerVertical="true">
+        <TextView
+            android:id="@+id/tv_people_id"
+            style="@style/PeopleText"
+            android:text="ID:"
+            />
+        <TextView
+            android:id="@+id/tv_people_name"
+            style="@style/PeopleText"
+            android:text="姓名:"
+            />
+        <TextView
+            android:id="@+id/tv_people_type"
+            style="@style/PeopleText"
+            android:text="类型:"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_people_num"
+            style="@style/PeopleText"
+            android:text="门禁卡号:"
+            />
+        <TextView
+            android:id="@+id/tv_people_time"
+            style="@style/PeopleText"
+            android:text="到期时间:"
+            android:maxLines="2"
+            android:layout_marginTop="10dp"
+            />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/single_add"
+        android:title="单个添加" />
+    <item
+        android:id="@+id/query_by_id"
+        android:title="单个查询" />
+    <item
+        android:id="@+id/match_switch"
+        android:title="关闭检测" />
+    <item
+        android:id="@+id/remove_all"
+        android:title="清空注册人员" />
+    <item
+        android:id="@+id/batch_add"
+        android:title="批量添加"
+        android:visible="false"/>
+    <item
+        android:id="@+id/people_screen"
+        android:title="筛选人员"
+        android:visible="false"/>
+    <item
+        android:id="@+id/people_manager"
+        android:title="人脸库管理"
+        android:visible="false"/>
+</menu>

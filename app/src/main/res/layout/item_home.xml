@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+    <ImageView
+        android:id="@+id/iv_head"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@mipmap/ic_launcher"/>
+    <TextView
+        android:layout_below="@id/iv_head"
+        android:id="@+id/tv_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="姓名："
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:layout_below="@id/tv_username"
+        android:id="@+id/tv_sex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="性别："
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:layout_below="@id/tv_sex"
+        android:id="@+id/tv_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="年龄："
+        android:layout_centerHorizontal="true"/>
+    <TextView
+        android:layout_below="@id/tv_age"
+        android:id="@+id/tv_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="对比结果："
+        android:layout_centerHorizontal="true"/>
+</RelativeLayout>
