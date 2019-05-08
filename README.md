@@ -3,14 +3,21 @@
 ## 1.导入SDK
 本文基于AndroidStudio 3.2进行介绍。
 
-### 1.打开FaceCameraDemo，找到facecamerasdk目录,如下图：
-
-### 2.在自己的工程中导入，File--New--Import Module
-
-### 3.选择上面提到的facecamerasdk目录，并Finish
-
-### 4.导入成功之后，添加依赖
-
+### 1 将其添加到存储库末尾的根build.gradle中
+~~~
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+~~~
+### 2 添加依赖项
+~~~
+dependencies {
+	        implementation 'com.github.renlei521:FaceCameraSdk:Tag'
+	}
+~~~
 ## 2.接口即调用过程
 
 ### 获取FaceSdk实例
