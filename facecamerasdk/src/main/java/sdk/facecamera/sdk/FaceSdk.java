@@ -65,10 +65,11 @@ public class FaceSdk {
 
     private List<QueryFaceModel> faceModelList;
 
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+//            Log.i(TAG,"Handler is main thread = " + (Looper.getMainLooper() == Looper.myLooper()));
             QueryFaceModel model = (QueryFaceModel) msg.obj;
             if (mQueryCb != null){
                 mQueryCb.onQueryById(true,model);
@@ -243,7 +244,8 @@ public class FaceSdk {
         private QueryFaceModel info;
         @Override
         public void apply(ComHaSdkLibrary.HA_Cam cam, QueryFaceInfo faceQueryInfo, Pointer usrParam) {
-            Log.i(TAG, "apply: record no" + faceQueryInfo.record_no +"; record_count" + faceQueryInfo.record_count);
+//            Log.i(TAG, "apply: record no" + faceQueryInfo.record_no +"; record_count" + faceQueryInfo.record_count);
+//            Log.i(TAG,"HA_FaceQueryCb is main thread = " + (Looper.getMainLooper() == Looper.myLooper()));
             if (faceQueryInfo.record_no == 0){
                 Message message = Message.obtain();
                 message.obj = info;
