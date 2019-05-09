@@ -57,12 +57,19 @@ public class MainActivity extends BaseActivity {
         mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),mFragments);
         viewPager.setAdapter(mPagerAdapter);
         viewPager.setOffscreenPageLimit(4);
-        boolean ret = FaceSdk.getInstance().Initialize(this,ip);
+        boolean ret = FaceSdk.getInstance().Initialize(MainActivity.this,ip);
         if (ret){
-            Toast.makeText(getApplicationContext(),"初始化成功",Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(),"初始化成功",Toast.LENGTH_SHORT).show();
         }else {
-            Toast.makeText(getApplicationContext(),"初始化失败",Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(),"初始化失败",Toast.LENGTH_SHORT).show();
         }
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        }).start();
+
         FaceSdk.getInstance().setConnectCallBack(new FaceSdk.ConnectCallBack() {
             @Override
             public void onConnected(String ip, short port, int usrParam) {
