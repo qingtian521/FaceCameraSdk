@@ -20,4 +20,15 @@
         android:layout_height="wrap_content"
         android:text="确定"/>
 
+    <Button
+        android:id="@+id/bt_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="搜索"/>
+
+    <TextView
+        android:id="@+id/search_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </LinearLayout>

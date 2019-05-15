@@ -14,7 +14,11 @@ import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -23,6 +27,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import sdk.facecamera.sdk.pojos.DeviceModel;
 import sdk.facecamera.sdk.pojos.FaceInfo;
 import sdk.facecamera.sdk.pojos.QueryFaceModel;
 import sdk.facecamera.sdk.sdk.ComHaSdkLibrary;
@@ -33,6 +38,7 @@ import sdk.facecamera.sdk.sdk.HA_LiveStream;
 import sdk.facecamera.sdk.sdk.QueryCondition;
 import sdk.facecamera.sdk.sdk.QueryFaceInfo;
 import sdk.facecamera.sdk.sdk.ha_rect;
+import sdk.facecamera.sdk.sdk.ipscan_t;
 import sdk.facecamera.sdk.utils.H264Decoder;
 import sdk.facecamera.sdk.utils.StringUtil;
 
@@ -77,6 +83,8 @@ public class FaceSdk {
             if(mQueryPageCallBack != null && faceModelList != null){
                 mQueryPageCallBack.onQueryPageCallBack(true,faceModelList); }
         }
+
+
     };
 
     public interface FaceInfoCallBack{
@@ -579,4 +587,52 @@ public class FaceSdk {
         return ComHaSdkLibrary.INSTANCE.HA_DeleteFaceDataAll(mCamera);
     }
 
+
+    /**
+     * 搜索设备，在局域网内
+     */
+
+    private HA_SearchDeviceCb ha_searchDeviceCb = new HA_SearchDeviceCb();
+
+    public void searchDevice(){
+        //注册搜索回调函数
+        ComHaSdkLibrary.INSTANCE.HA_RegDiscoverIpscanCb(ha_searchDeviceCb, 0);
+        ComHaSdkLibrary.INSTANCE.HA_DiscoverIpscan();
+    }
+
+    /**
+     * 设备搜索回调函数
+     */
+    public void addSearchDeviceListener(OnSearchDeviceListener listener){
+        this.searchDeviceListener = listener;
+    }
+
+    private OnSearchDeviceListener searchDeviceListener = null;
+
+    public interface OnSearchDeviceListener{
+        void onSearchResult(DeviceModel model);
+    }
+
+    //搜索结果回调在这里面
+    private class HA_SearchDeviceCb implements ComHaSdkLibrary.discover_ipscan_cb_t{
+
+        @Override
+        public void apply(ipscan_t ipscan, int usr_param) {
+            DeviceModel model = new DeviceModel();
+            try {
+                model.setDeviceMac(new String(ipscan.mac, "UTF-8").trim());
+                model.setDeviceIp(new String(ipscan.ip, "UTF-8").trim());
+                model.setNetMask(new String(ipscan.netmask, "UTF-8").trim());
+                model.setManuFacturer(new String(ipscan.manufacturer, "UTF-8").trim());
+                model.setPlatform(new String(ipscan.platform, "UTF-8").trim());
+                model.setSystem(new String(ipscan.system, "UTF-8").trim());
+                model.setVersion(new String(ipscan.version, "UTF-8").trim());
+                if (searchDeviceListener != null){
+                    searchDeviceListener.onSearchResult(model);
+                }
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

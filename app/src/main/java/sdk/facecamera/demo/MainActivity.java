@@ -93,10 +93,10 @@ public class MainActivity extends BaseActivity {
 
 //        bnBar.setVisibility(View.GONE);
         //将item添加到bnBar中
-        bnBar.addItem(new BottomNavigationItem(R.drawable.ic_home,"首页"))
+        bnBar.addItem(new BottomNavigationItem(R.drawable.ic_icon_home,"首页"))
 //                .addItem(new BottomNavigationItem(R.drawable.ic_compare,"人脸对比参数"))
 //                .addItem(new BottomNavigationItem(R.drawable.ic_camera,"相机参数"))
-                .addItem(new BottomNavigationItem(R.drawable.ic_people,"人员管理"))
+                .addItem(new BottomNavigationItem(R.drawable.ic_icon_setting,"人员管理"))
                 .initialise();//确认布局
 
         bnBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {

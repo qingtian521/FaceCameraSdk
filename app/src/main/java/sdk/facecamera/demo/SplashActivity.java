@@ -9,19 +9,27 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import sdk.facecamera.demo.crash.BaseActivity;
+import sdk.facecamera.demo.util.LogUtils;
+import sdk.facecamera.sdk.FaceSdk;
+import sdk.facecamera.sdk.pojos.DeviceModel;
 
 public class SplashActivity extends BaseActivity {
 
     private EditText etIp;
     private Button btConfirm;
+    private Button btSearch;
+    private StringBuffer stringBuffer;
+    private TextView tvSearch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+
         etIp = findViewById(R.id.et_ip);
         btConfirm = findViewById(R.id.bt_confirm);
-
+        btSearch = findViewById(R.id.bt_search);
+        tvSearch = findViewById(R.id.search_result);
 
         btConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,5 +44,19 @@ public class SplashActivity extends BaseActivity {
                 finish();
             }
         });
+        btSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FaceSdk.getInstance().searchDevice();
+                FaceSdk.getInstance().addSearchDeviceListener(new FaceSdk.OnSearchDeviceListener() {
+                    @Override
+                    public void onSearchResult(DeviceModel model) {
+                        LogUtils.i(model.getDeviceIp());
+                    }
+                });
+            }
+        });
+
+
     }
 }
