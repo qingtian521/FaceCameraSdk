@@ -15,7 +15,7 @@ allprojects {
 ### 2 添加依赖项
 ~~~
 dependencies {
-	        implementation 'com.github.renlei521:FaceCameraSdk:Tag'
+	        implementation 'com.github.renlei521:FaceCameraSdk:1.0.1'
 	}
 ~~~
 ## 2.接口即调用过程
