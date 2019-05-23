@@ -1,9 +1,6 @@
 package sdk.facecamera.sdk;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -13,18 +10,11 @@ import android.view.SurfaceHolder;
 import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import sdk.facecamera.sdk.pojos.DeviceModel;
@@ -506,10 +496,18 @@ public class FaceSdk {
         return result == 0;
     }
 
+    /**
+     * 设置人脸比对开关
+     * @param enable true 开 ： 关
+     */
     public void setMatchEnable(boolean enable) {
         ComHaSdkLibrary.INSTANCE.HA_SetMatchEnable(mCamera,enable?1:0);
     }
 
+    /**
+     * 获取人脸比对开关
+     * @return  true 开 ： 关
+     */
     public boolean getMatchEnable() {
         IntBuffer buffer = IntBuffer.allocate(4);
         ComHaSdkLibrary.INSTANCE.HA_GetMatchEnable(mCamera,buffer);
@@ -635,4 +633,116 @@ public class FaceSdk {
             }
         }
     }
+
+    /**
+     * 获取活体检测开关状态
+     * @return true 开 : 关
+     */
+    public boolean getAliveDetectEnable(){
+        IntBuffer buffer = IntBuffer.allocate(4);
+        ComHaSdkLibrary.INSTANCE.HA_GetAliveDetectEnable(mCamera,buffer);
+        int ret = buffer.get();
+        return ret != 0;
+    }
+
+    /**
+     * 设置活体检测开关状态
+     * @param enable true 开 : 关
+     * @return 设置结果
+     */
+    public boolean setAliveDetectEnable(boolean enable){
+        int ret = ComHaSdkLibrary.INSTANCE.HA_SetAliveDetectEnable(mCamera,enable?1:0);
+        return ret != 0;
+    }
+
+    /**
+     * 获取对比确定分数
+     * @return 分数 -1表示获取失败
+     */
+    public int getMatchScore(){
+        IntBuffer buffer = IntBuffer.allocate(4);
+        int ret =  ComHaSdkLibrary.INSTANCE.HA_GetMatchScore(mCamera,buffer);
+        return ret == 0 ? buffer.get() : -1;
+    }
+
+    /**
+     * 设置人脸比对确性分数
+     * @param score 确信分数（0-100分）
+     * @return
+     */
+    public boolean setMatchScore(int score){
+        if(score < 0 || score > 100){
+           return false;
+        }
+       int ret = ComHaSdkLibrary.INSTANCE.HA_SetMatchScore(mCamera,score);
+       //ret == 0表示设置成功
+        return ret == 0;
+    }
+
+    /**
+     * 查看输出图像的品质 jpg图像品质[1~100]
+     * @return  图像的品质value
+     */
+    public int getOutputImageQuality(){
+        IntBuffer buffer =IntBuffer.allocate(4);
+        int ret = ComHaSdkLibrary.INSTANCE.HA_GetOutputImageQuality(mCamera,buffer);
+        return ret == 0 ? buffer.get() : -1;
+    }
+
+    /**
+     * 设置输出图像的品质
+     * @param value jpg图像品质[1~100]
+     * @return 设置结果
+     */
+    public boolean setOutputImageQuality(int value){
+        int ret = ComHaSdkLibrary.INSTANCE.HA_SetOutputImageQuality(mCamera,value);
+        return ret == 0 ;
+    }
+
+    /**
+     * 获取去重复开关 -1 为关 ， 大于0 为开，并且该值就是重复超时
+     * @return  -1 为关 大于0 为开，并且该值就是重复超时
+     */
+    public int getRepeatConfig(){
+        IntBuffer eBuffer = IntBuffer.allocate(4); // 去重复开关，0:关 1:开
+        IntBuffer tBuffer = IntBuffer.allocate(4); // 重复超时，当enable为1的时候有效
+        ComHaSdkLibrary.INSTANCE.HA_GetDereplicationgConfig(mCamera,eBuffer,tBuffer);
+        return eBuffer.get() == 0 ? -1 : tBuffer.get();
+    }
+
+    /**
+     * 设置深度去重复开关
+     * @param enable 开关
+     * @param timeout 超时时间(1s~60s)
+     * @return true 设置成功
+     */
+
+    public boolean setRepeatConfig(boolean enable,int timeout){
+        int ret = ComHaSdkLibrary.INSTANCE.HA_SetDereplicationEnable(mCamera,enable? 1 : 0,timeout);
+        return ret == 0;
+    }
+
+    /**
+     *  获取大角度人脸过滤开关
+     * @return  int  -1 为关，> 0为开，并且值为角度
+     */
+    public int getFaceAngleEnable(){
+        ByteBuffer angle = ByteBuffer.allocate(4);
+        ByteBuffer enable = ByteBuffer.allocate(4);
+        ComHaSdkLibrary.INSTANCE.HA_GetValidAngleEnable(mCamera,angle,enable);
+        return enable.get() == 0 ? -1 : angle.get();
+    }
+
+
+    /**
+     * 设置大角度人脸角度开关
+     * @param enable 开关 true开
+     * @param angle 角度值
+     * @return 设置结果 true为成功
+     */
+    public boolean setFaceAngleEnable(boolean enable,int angle){
+        int ret = ComHaSdkLibrary.INSTANCE.HA_SetValidAngleEnable(mCamera,(byte) angle,enable ? (byte) 1: (byte) 0 );
+        return ret == 0;
+    }
+
 }
