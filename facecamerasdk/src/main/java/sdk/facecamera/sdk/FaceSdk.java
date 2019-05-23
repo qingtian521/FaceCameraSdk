@@ -12,8 +12,11 @@ import com.sun.jna.Pointer;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -743,6 +746,29 @@ public class FaceSdk {
     public boolean setFaceAngleEnable(boolean enable,int angle){
         int ret = ComHaSdkLibrary.INSTANCE.HA_SetValidAngleEnable(mCamera,(byte) angle,enable ? (byte) 1: (byte) 0 );
         return ret == 0;
+    }
+
+    /**
+     *  注入用户校验码
+     * @param   auth 校验码数据
+     * @return  true 成功
+     */
+    public boolean writeCustomerAuthCode(String auth){
+        int size = auth.getBytes().length;
+        ByteBuffer buffer = ByteBuffer.wrap(auth.getBytes());
+        int ret = ComHaSdkLibrary.INSTANCE.HA_WriteCustomerAuthCode(mCamera,buffer,size);
+        return ret == 0;
+    }
+
+    /**
+     * 读取用户校验码
+     * @return  String 校验码
+     */
+    public String readCustomerAuthCode(){
+        ByteBuffer auth = ByteBuffer.allocate(20);
+        IntBuffer authSize = IntBuffer.allocate(4);
+        ComHaSdkLibrary.INSTANCE.HA_ReadCustomerAuthCode(mCamera,auth,authSize);
+        return StringUtil.byteBufferToString(auth);
     }
 
 }
