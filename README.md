@@ -15,7 +15,7 @@ allprojects {
 ### 2 添加依赖项
 ~~~
 dependencies {
-	        implementation 'com.github.renlei521:FaceCameraSdk:1.1.2'
+	        implementation 'com.github.renlei521:FaceCameraSdk:1.1.3'
 	}
 ~~~
 ## 2.接口即调用过程
@@ -192,7 +192,7 @@ faceSdk.openCp()
 faceSdk.UnInitialize();
 ~~~
 使用完之后记得注销
-## 1.1.2 新增功能
+## 1.1.3 新增功能
 ### 活体检测开关
 ~~~
 //获取活体检测开关状态
