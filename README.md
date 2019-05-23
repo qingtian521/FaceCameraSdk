@@ -15,7 +15,7 @@ allprojects {
 ### 2 添加依赖项
 ~~~
 dependencies {
-	        implementation 'com.github.renlei521:FaceCameraSdk:1.0.3'
+	        implementation 'com.github.renlei521:FaceCameraSdk:1.1.2'
 	}
 ~~~
 ## 2.接口即调用过程
@@ -192,3 +192,36 @@ faceSdk.openCp()
 faceSdk.UnInitialize();
 ~~~
 使用完之后记得注销
+## 1.1.2 新增功能
+### 活体检测开关
+~~~
+//获取活体检测开关状态
+getAliveDetectEnable
+//设置活体检测开关状态
+setAliveDetectEnable
+~~~
+### 对比确定分数
+~~~
+getMatchScore   // 获取人脸比对确性分数，-1表示获取失败
+setMatchScore  //  设置人脸比对确信分数（0-100分）
+~~~
+### 输出图像的品质
+~~~
+getOutputImageQuality // 查看输出图像的品质 jpg图像品质[1~100]
+setOutputImageQuality  // 设置输出图像的品质 value jpg图像品质[1~100]
+~~~
+### 去重复开关
+~~~
+getRepeatConfig // 获取去重复开关 -1 为关 ， 大于0 为开，并且该值就是重复超时
+setRepeatConfig // 设置深度去重复开关 enable 开关 timeout 超时时间(1s~60s)
+~~~
+### 大角度人脸过滤开关
+~~~
+getFaceAngleEnable // 获取大角度人脸过滤开关  int  -1 为关，> 0为开，并且值为角度
+setFaceAngleEnable  // 设置大角度人脸角度开关 enable 开关 true开 angle 角度值
+~~~
+### 用户校验码
+~~~
+writeCustomerAuthCode // 注入用户校验码 auth 校验码数据
+readCustomerAuthCode // 读取用户校验码 String 校验码
+~~~
