@@ -225,3 +225,8 @@ setFaceAngleEnable  // 设置大角度人脸角度开关 enable 开关 true开 a
 writeCustomerAuthCode // 注入用户校验码 auth 校验码数据
 readCustomerAuthCode // 读取用户校验码 String 校验码
 ~~~
+### 人脸检测质量阈值开关
+~~~
+getQvalueThresholdEnable // 获取人脸检测质量阈值开关 检测质量阈值1~100  :-1 为 关
+setQvalueThresholdEnable // 设置人脸检测质量阈值开关 enable 开关 true:false threshold 检测质量阈值1~100
+~~~
