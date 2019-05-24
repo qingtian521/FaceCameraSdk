@@ -110,6 +110,8 @@ public class HomeFragment extends BaseFragment{
                     model.setAge(info.getAge());
                     model.setImg(info.getCaptureImageData());
                     model.setSex(info.getSex());
+                    model.setFaceAngle(info.getFaceAngle());
+                    model.setFaceAngleFlat(info.getFaceAngleFlat());
                 }else {
                     //匹配不到  但是数据可能不为空
                     model.setResult(false);
@@ -119,7 +121,8 @@ public class HomeFragment extends BaseFragment{
                     model.setAge(info.getAge());
                     model.setSex(info.getSex());
                     model.setImg(info.getCaptureImageData());
-
+                    model.setFaceAngle(info.getFaceAngle());
+                    model.setFaceAngleFlat(info.getFaceAngleFlat());
                 }
                 personList.add(model);
                 //通知更新

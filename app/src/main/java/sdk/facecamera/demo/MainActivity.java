@@ -59,6 +59,9 @@ public class MainActivity extends BaseActivity {
         viewPager.setOffscreenPageLimit(4);
         boolean ret = FaceSdk.getInstance().Initialize(MainActivity.this,ip);
         if (ret){
+           LogUtils.e("getFaceAngleEnable" + FaceSdk.getInstance().getFaceAngleEnable());
+//           FaceSdk.getInstance().writeCustomerAuthCode("testmyself");
+            FaceSdk.getInstance().getQvalueThresholdEnable();
 //                    Toast.makeText(getApplicationContext(),"初始化成功",Toast.LENGTH_SHORT).show();
         }else {
 //                    Toast.makeText(getApplicationContext(),"初始化失败",Toast.LENGTH_SHORT).show();

@@ -59,8 +59,8 @@ public class FaceSdk {
     private H264Decoder mDecoder;
     private FaceInfoCallBack mFaceInfoCb;
     private Object mQueryObj = new Object();
-    private static int mFrameWidth = 1920;
-    private static int mFrameHeight = 1080;
+    private int mFrameWidth = 1920;
+    private int mFrameHeight = 1080;
 
     private List<QueryFaceModel> faceModelList;
 
@@ -153,6 +153,8 @@ public class FaceSdk {
                     String personId = StringUtil.byte2String(faceRecoInfo.matchPersonId);
                     String personName =StringUtil.byte2String(faceRecoInfo.matchPersonName);
 //                    info.setCaptureTime(new Date(System.currentTimeMillis()));
+                    info.setFaceAngle(faceRecoInfo.faceAngle);
+                    info.setFaceAngleFlat(faceRecoInfo.faceAngleFlat);
                     info.setId(personId);
                     info.setName(personName);
                     info.setAge(faceRecoInfo.age);
@@ -186,6 +188,11 @@ public class FaceSdk {
                         mFaceInfoCb.onFaceInfoResult(true,info,null);
                     }
                 }else {
+                    if (faceRecoInfo.existFaceImg != 0){
+                        info.setCaptureImageData(faceRecoInfo.faceImg.getByteArray(0,faceRecoInfo.faceImgLen));
+                    }
+                    info.setFaceAngle(faceRecoInfo.faceAngle);
+                    info.setFaceAngleFlat(faceRecoInfo.faceAngleFlat);
                     if (mFaceInfoCb != null){
                         mFaceInfoCb.onFaceInfoResult(false,info,null);
                     }
@@ -215,10 +222,10 @@ public class FaceSdk {
         }
     }
 
-    public static int getFrameWidth(){
+    public int getFrameWidth(){
         return mFrameWidth;
     }
-    public static int getFrameHeight(){
+    public int getFrameHeight(){
         return mFrameHeight;
     }
 
@@ -671,7 +678,7 @@ public class FaceSdk {
     /**
      * 设置人脸比对确性分数
      * @param score 确信分数（0-100分）
-     * @return
+     * @return 设置结果，true为成功
      */
     public boolean setMatchScore(int score){
         if(score < 0 || score > 100){
@@ -769,6 +776,28 @@ public class FaceSdk {
         IntBuffer authSize = IntBuffer.allocate(4);
         ComHaSdkLibrary.INSTANCE.HA_ReadCustomerAuthCode(mCamera,auth,authSize);
         return StringUtil.byteBufferToString(auth);
+    }
+
+    /**
+     * 获取人脸检测质量阈值开关
+     * @return 检测质量阈值1~100  :-1 为 关
+     */
+    public int getQvalueThresholdEnable(){
+        ByteBuffer threshold = ByteBuffer.allocate(4);
+        ByteBuffer enable = ByteBuffer.allocate(4);
+        ComHaSdkLibrary.INSTANCE.HA_GetQvalueThresholdEnable(mCamera,threshold,enable);
+        return enable.get() == 0 ? -1 : threshold.get();
+    }
+
+    /**
+     * 设置人脸检测质量阈值开关
+     * @param enable 开关 true:false
+     * @param threshold 检测质量阈值1~100
+     * @return true 成功
+     */
+    public boolean setQvalueThresholdEnable(boolean enable,int threshold){
+        int ret = ComHaSdkLibrary.INSTANCE.HA_SetQvalueThresholdEnable(mCamera,enable ? (byte) 1:(byte) 0,(byte) threshold);
+        return ret == 0;
     }
 
 }

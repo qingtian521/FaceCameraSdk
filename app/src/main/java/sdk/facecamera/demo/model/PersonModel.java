@@ -6,16 +6,35 @@ package sdk.facecamera.demo.model;
 
 public class PersonModel {
     public String name;
-    public byte age;
-    public byte sex;
-    public byte[] img;
-    public boolean result;
+    private int faceAngle;
+    private int faceAngleFlat;
+    private byte age;
+    private byte sex;
+    private byte[] img;
+    private boolean result;
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getFaceAngle() {
+        return faceAngle;
+    }
+
+    public void setFaceAngle(int faceAngle) {
+        this.faceAngle = faceAngle;
+    }
+
+    public int getFaceAngleFlat() {
+        return faceAngleFlat;
+    }
+
+    public void setFaceAngleFlat(int faceAngleFlat) {
+        this.faceAngleFlat = faceAngleFlat;
     }
 
     public byte getAge() {

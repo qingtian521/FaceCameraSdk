@@ -18,6 +18,8 @@ public final class FaceInfo {
     private byte[][] imageData;
     private byte[][] twisBgrs;
 
+    private int faceAngle; //人脸角度 -90~90
+    private int faceAngleFlat; //人脸角度
 
     private long sequenceID;
     private String cameraID;
@@ -248,6 +250,8 @@ public final class FaceInfo {
         this.modelImageData = modelImageData;
     }
 
+
+
     /**
      * 获取q值
      * @return
@@ -273,6 +277,31 @@ public final class FaceInfo {
         this.featureRectInBg[1] = y;
         this.featureRectInBg[2] = w;
         this.featureRectInBg[3] = h;
+    }
+
+    /**
+     * 获取人脸角度
+     * @return 人脸角度 -90~90
+     */
+    public int getFaceAngle() {
+        return faceAngle;
+    }
+
+    /**
+     * 设置人脸角度
+     * @param faceAngle 角度
+     */
+    public void setFaceAngle(int faceAngle) {
+        this.faceAngle = faceAngle;
+    }
+
+
+    public int getFaceAngleFlat() {
+        return faceAngleFlat;
+    }
+
+    public void setFaceAngleFlat(int faceAngleFlat) {
+        this.faceAngleFlat = faceAngleFlat;
     }
 
     /**

@@ -109,11 +109,23 @@ public class FaceRecoInfo extends Structure {
 	public byte skinColour;
 	/** \u6ce8\u518c\u6807\u51c6\u5206\u6570\uff0c\u5206\u6570\u8d8a\u9ad8\u8d8a\u9002\u5408\u7528\u6765\u6ce8\u518c */
 	public byte qValue;
+
+	public byte sourceOfReg;   //注册来源 0：无此信息 1：注册软件注册  2：无感录入 3：云同步注册
+
+	public byte attributeOfReg;  //注册人员属性 0:无此信息 1：永久有效名单 2：临时有效名单 3：永久无效名单
+
+	public byte living;    //是否活体 0：无此信息 1：活体 2：非活体
+
+	public byte hatColour; //安全帽颜色  enum HatDetectResult
+
+	public byte faceAngle; //人脸扭转角度 (与平面夹角)  -90~90;
+
+	public byte faceAngleFlat;
 	/**
 	 * \u4fdd\u7559<br>
 	 * C type : char[123]
 	 */
-	public byte[] resv = new byte[123];
+	public byte[] resv = new byte[117];
 	/**
 	 * \u5168\u666f\u56fe\u50cf\u6570\u636e<br>
 	 * C type : unsigned char*
@@ -148,11 +160,12 @@ public class FaceRecoInfo extends Structure {
 	 * C type : unsigned char*
 	 */
 	public Pointer modelFaceImg;
+
 	public FaceRecoInfo() {
 		super();
 	}
 	protected List<String> getFieldOrder() {
-		return Arrays.asList("sequence", "camId", "posId", "posName", "tvSec", "tvUsec", "isRealtimeData", "matched", "matchPersonId", "matchPersonName", "matchRole", "existImg", "imgFormat", "imgLen", "faceXInImg", "faceYInImg", "faceWInImg", "faceHInImg", "existFaceImg", "faceImgFormat", "faceImgLen", "faceXInFaceImg", "faceYInFaceImg", "faceWInFaceImg", "faceHInFaceImg", "existVideo", "videoStartSec", "videoStartUsec", "videoEndSec", "videoEndUsec", "videoFormat", "videoLen", "sex", "age", "expression", "skinColour", "qValue", "resv", "img", "faceImg", "video", "feature_size", "feature", "modelFaceImgLen", "modelFaceImgFmt", "modelFaceImg");
+		return Arrays.asList("sequence", "camId", "posId", "posName", "tvSec", "tvUsec", "isRealtimeData", "matched", "matchPersonId", "matchPersonName", "matchRole", "existImg", "imgFormat", "imgLen", "faceXInImg", "faceYInImg", "faceWInImg", "faceHInImg", "existFaceImg", "faceImgFormat", "faceImgLen", "faceXInFaceImg", "faceYInFaceImg", "faceWInFaceImg", "faceHInFaceImg", "existVideo", "videoStartSec", "videoStartUsec", "videoEndSec", "videoEndUsec", "videoFormat", "videoLen", "sex", "age", "expression", "skinColour", "qValue","sourceOfReg", "attributeOfReg","living","hatColour","faceAngle","faceAngleFlat","resv", "img", "faceImg", "video", "feature_size", "feature", "modelFaceImgLen", "modelFaceImgFmt", "modelFaceImg");
 	}
 	public static class ByReference extends FaceRecoInfo implements Structure.ByReference {
 		

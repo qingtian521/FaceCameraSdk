@@ -39,7 +39,8 @@ public class HomeRecyAdapter extends RecyclerView.Adapter{
         if (modelList.get(position).isResult()){
             ((HomeHolder) holder).name.setText("姓名："+modelList.get(position).getName());
             ((HomeHolder) holder).age.setText("年龄："+modelList.get(position).getAge());
-
+            ((HomeHolder) holder).angle.setText("人脸角度："+modelList.get(position).getFaceAngle());
+            ((HomeHolder) holder).angleFlat.setText("人脸角度："+ modelList.get(position).getFaceAngleFlat());
             if (modelList.get(position).getSex() == 1){
                 ((HomeHolder) holder).sex.setText("性别：男");
             }else {
@@ -52,7 +53,8 @@ public class HomeRecyAdapter extends RecyclerView.Adapter{
             ((HomeHolder) holder).sex.setText("性别：");
             ((HomeHolder) holder).name.setText("姓名：");
             ((HomeHolder) holder).age.setText("年龄：");
-
+            ((HomeHolder) holder).angle.setText("人脸角度："+modelList.get(position).getFaceAngle());
+            ((HomeHolder) holder).angleFlat.setText("人脸角度："+ modelList.get(position).getFaceAngleFlat());
         }
         if (modelList.get(position).getImg() != null){
             Bitmap bitmap = UiUtil.Bytes2Bimap(modelList.get(position).getImg());
@@ -67,7 +69,7 @@ public class HomeRecyAdapter extends RecyclerView.Adapter{
     }
 
     private class HomeHolder extends RecyclerView.ViewHolder{
-        TextView name,sex,age,result;
+        TextView name,sex,age,result,angle,angleFlat;
         ImageView head;
         public HomeHolder(View itemView) {
             super(itemView);
@@ -75,7 +77,9 @@ public class HomeRecyAdapter extends RecyclerView.Adapter{
             sex = itemView.findViewById(R.id.tv_sex);
             age = itemView.findViewById(R.id.tv_age);
             result = itemView.findViewById(R.id.tv_result);
-            head = itemView.findViewById(R.id.iv_head);;
+            head = itemView.findViewById(R.id.iv_head);
+            angle = itemView.findViewById(R.id.tv_angle);
+            angleFlat = itemView.findViewById(R.id.tv_angle_flat);
         }
 
     }

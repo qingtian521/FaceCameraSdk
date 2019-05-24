@@ -20,6 +20,7 @@ import java.nio.ShortBuffer;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
+//@SuppressWarnings("DeprecatedIsStillUsed")
 public interface ComHaSdkLibrary extends Library {
 	public static final String JNA_LIBRARY_NAME = "hasdk";
 	public static final NativeLibrary JNA_NATIVE_LIB = NativeLibrary.getInstance(ComHaSdkLibrary.JNA_LIBRARY_NAME);
@@ -33,7 +34,7 @@ public interface ComHaSdkLibrary extends Library {
 		public static final int FORMAT_ID_JPEG = 1;
 		/** <i>native declaration : network_msg.h:53</i> */
 		public static final int FORMAT_ID_H264 = 2;
-		/** <i>native declaration : network_msg.h:54</i> */
+		/** <i>native gaideclaration : network_msg.h:54</i> */
 		public static final int FORMAT_ID_AVI = 3;
 		/**
 		 * 8bit\u7070\u5ea6\u56fe<br>
@@ -2939,6 +2940,32 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:1039</i><br>
 	 * @deprecated use the safer methods {@link #HA_GetMatchScore(com.ha.sdk.ComHaSdkLibrary.HA_Cam, IntBuffer)} and {@link #HA_GetMatchScore(com.ha.sdk.ComHaSdkLibrary.HA_Cam, IntByReference)} instead
 	 */
+
+	/**
+	 * @brief   获取人脸检测质量阈值开关
+	 * @param   cam   相机句柄
+	 * @param   threshold 检测质量阈值1~100
+	 * @param   enable 开关 0：关 !0：开
+	 * @return  0 获取成功
+	 * @return  <0 获取失败
+	 */
+	@Deprecated
+	int HA_GetQvalueThresholdEnable(HA_Cam cam,Pointer threshold,Pointer enable);
+
+	int HA_GetQvalueThresholdEnable(HA_Cam cam,ByteBuffer threshold,ByteBuffer enable);
+
+	/**
+	 * @brief   设置人脸检测质量阈值开关
+	 * @param   cam   相机句柄
+	 * @param   threshold 检测质量阈值1~100
+	 * @param   enable 开关 0：关 !0：开
+	 * @return  0 设置成功
+	 * @return  <0 设置失败
+	 */
+	int  HA_SetQvalueThresholdEnable(HA_Cam cam, byte threshold, byte enable);
+
+
+
 	@Deprecated 
 	int HA_GetMatchScore(HA_Cam cam, IntByReference score);
 	/**
