@@ -237,3 +237,20 @@ faceAngleFlat //
 getQvalueThresholdEnable // 获取人脸检测质量阈值开关 检测质量阈值1~100  :-1 为 关
 setQvalueThresholdEnable // 设置人脸检测质量阈值开关 enable 开关 true:false threshold 检测质量阈值1~100
 ~~~
+
+## 1.2.4 版本
+### 修改初始化调用方式
+~~~ 
+boolean ret = FaceSdk.getInstance().initialize(ip);
+~~~
+
+### 修改反初始化调用方式
+~~~
+FaceSdk.getInstance().unInitialize();
+~~~
+### 修改视频播放调用方式
+~~~
+FaceSdk.getInstance().startVideoPlay(mSurfaceView);
+~~~
+说明：本次更新优化了内部代码细节，使代码更符合规范
+      删除了faceSdk单例模式时内部对Context的引用，消除内存泄漏的风险。但同时startVideoPlay时需要传入TextureView而不是SurfaceHolder

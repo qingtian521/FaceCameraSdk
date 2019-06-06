@@ -6,17 +6,15 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 
 import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,8 +51,7 @@ public class FaceSdk {
         }
     }
 
-    private static FaceSdk mFaceSdk;
-    private Context mContext;
+    private volatile static FaceSdk mFaceSdk;
     private volatile boolean _played = false;
     private boolean initialized = false;
     private ComHaSdkLibrary.HA_Cam mCamera;
@@ -228,9 +225,9 @@ public class FaceSdk {
             byte[] h264 = stream.streamBuf.getByteArray(0, stream_len);
             mFrameWidth = stream.w;
             mFrameHeight = stream.h;
-            if (mContext == null) {
-                throw new NullPointerException("you need to initialzie sdk");
-            }
+//            if (mContext == null) {
+//                throw new NullPointerException("you need to initialzie sdk");
+//            }
             if (_played) {
                 mDecoder.handleH264(h264);
             }
@@ -324,13 +321,12 @@ public class FaceSdk {
     /**
      * 初始化方法
      *
-     * @param context
      * @param ip
      * @return
      */
-    public boolean Initialize(Context context, String ip) {
+    public boolean initialize( String ip) {
         if (initialized) return true;
-        mContext = context;
+//        mContext = context;
         IntBuffer connectErrorNum = IntBuffer.allocate(1);
         mCamera = ComHaSdkLibrary.INSTANCE.HA_ConnectEx(ip, (short) 9527, null, null, connectErrorNum, 0, 1);
         int errorNum = connectErrorNum.get();
@@ -352,12 +348,12 @@ public class FaceSdk {
     /**
      * 注销
      */
-    public void UnInitialize() {
+    public void unInitialize() {
         if (mCamera != null) {
             ComHaSdkLibrary.INSTANCE.HA_ClearAllCallbacks(mCamera);
             ComHaSdkLibrary.INSTANCE.HA_DisConnect(mCamera);
         }
-        mContext = null;
+//        mContext = null;
         initialized = false;
     }
 
@@ -369,9 +365,26 @@ public class FaceSdk {
      * @param holder 要播放画面的控件<br>可以不传递此参数，表示只接收数据而不展示，如果这样，就需要通过回调获取h264数据
      * @return 是否播放成功（只要设备处于连接状态且本函数为第一次被调用，则返回成功）
      */
-    public boolean startVideoPlay(SurfaceHolder holder) {
+//    @Deprecated
+//    public boolean startVideoPlay(SurfaceHolder holder) {
+//        if (_played) return false;
+//        mDecoder = new H264Decoder(holder,mContext);
+//        mDecoder.play();
+//        _played = true;
+//        return true;
+//    }
+
+    /**
+     * 播放实时视频画面
+     * <br>
+     * 不是函数成功返回后视频画面即刻展现，可能会有网络和解码的延迟，甚至可能根本没有收到设别的视频数据
+     *
+//     * @param holder 要播放画面的控件<br>可以不传递此参数，表示只接收数据而不展示，如果这样，就需要通过回调获取h264数据
+     * @return 是否播放成功（只要设备处于连接状态且本函数为第一次被调用，则返回成功）
+     */
+    public boolean startVideoPlay(SurfaceView surfaceView) {
         if (_played) return false;
-        mDecoder = new H264Decoder(holder, mContext);
+        mDecoder = new H264Decoder(surfaceView.getHolder(),surfaceView.getContext());
         mDecoder.play();
         _played = true;
         return true;
@@ -406,12 +419,16 @@ public class FaceSdk {
         byte[] faceID = new byte[20];
         byte[] faceName = new byte[16];
         byte[] resv = new byte[8184];
-        System.arraycopy(id.getBytes(), 0, faceID, 0, id.getBytes().length);
-        System.arraycopy(name.getBytes(), 0, faceName, 0, name.getBytes().length);
-
-        //Integer.MAX_VALUE
-        face = new FaceFlags(faceID, faceName, role, wiegandNo, effectTime, 0, resv);
-        ret = ComHaSdkLibrary.INSTANCE.HA_AddJpgFace(mCamera, face, jpgData, jpgData.length);
+        try {
+            System.arraycopy(id.getBytes("UTF-8"), 0, faceID, 0, id.getBytes("UTF-8").length);
+            System.arraycopy(name.getBytes("UTF-8"), 0, faceName, 0, name.getBytes("UTF-8").length);
+            //Integer.MAX_VALUE
+            face = new FaceFlags(faceID, faceName, role, wiegandNo, effectTime, 0, resv);
+            ret = ComHaSdkLibrary.INSTANCE.HA_AddJpgFace(mCamera, face, jpgData, jpgData.length);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return -1;
+        }
         return ret;
     }
 
@@ -432,8 +449,14 @@ public class FaceSdk {
         byte[] faceID = new byte[20];
         byte[] faceName = new byte[16];
         byte[] resv = new byte[8184];
-        System.arraycopy(id.getBytes(), 0, faceID, 0, id.getBytes().length);
-        System.arraycopy(name.getBytes(), 0, faceName, 0, name.getBytes().length);
+
+        try {
+            System.arraycopy(id.getBytes("UTF-8"), 0, faceID, 0, id.getBytes("UTF-8").length);
+            System.arraycopy(name.getBytes("UTF-8"), 0, faceName, 0, name.getBytes("UTF-8").length);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return -1;
+        }
 
         face = new FaceFlags(faceID, faceName, role, wiegandNo, Integer.MAX_VALUE, 0, resv);
         FaceImage faceImage = new FaceImage();
@@ -473,7 +496,12 @@ public class FaceSdk {
      */
     public boolean queryFaceById(final String id) {
         QueryCondition condition = new QueryCondition();
-        System.arraycopy(id.getBytes(), 0, condition.faceID, 0, id.getBytes().length);
+        try {
+            System.arraycopy(id.getBytes("UTF-8"), 0, condition.faceID, 0, id.getBytes("UTF-8").length);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return false;
+        }
         int ret = ComHaSdkLibrary.INSTANCE.HA_QueryFaceEx(mCamera, -1, 1, 100, (byte) (-1), (byte) (1),
                 (short) ComHaSdkLibrary.ConditionFlag.QUERY_BY_ID,
                 (short) ComHaSdkLibrary.QueryMode.QUERY_EXACT, condition);
@@ -502,8 +530,13 @@ public class FaceSdk {
         byte[] faceID = new byte[20];
         byte[] faceName = new byte[16];
         byte[] resv = new byte[8184];
-        System.arraycopy(model.getId().getBytes(), 0, faceID, 0, model.getId().getBytes().length);
-        System.arraycopy(model.getName().getBytes(), 0, faceName, 0, model.getName().getBytes().length);
+        try {
+            System.arraycopy(model.getId().getBytes("UTF-8"), 0, faceID, 0, model.getId().getBytes("UTF-8").length);
+            System.arraycopy(model.getName().getBytes("UTF-8"), 0, faceName, 0, model.getName().getBytes("UTF-8").length);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return false;
+        }
         FaceFlags faceFlags = new FaceFlags(faceID, faceName, model.getRole(), model.getWiegandNo(),
                 (int) model.getEffectTime(),
                 (int) model.getEffectStartTime(), resv);
@@ -556,6 +589,7 @@ public class FaceSdk {
     }
 
     public void haveFace(byte[] imageData, HaveFaceCallBack faceCallBack) {
+
         Object[] objects = twistImage(imageData);
         int code = (int) objects[0];
         if (code == 0) {
@@ -799,8 +833,20 @@ public class FaceSdk {
      * @return true 成功
      */
     public boolean writeCustomerAuthCode(String auth) {
-        int size = auth.getBytes().length;
-        ByteBuffer buffer = ByteBuffer.wrap(auth.getBytes());
+        int size = 0;
+        try {
+            size = auth.getBytes("UTF-8").length;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return false;
+        }
+        ByteBuffer buffer = null;
+        try {
+            buffer = ByteBuffer.wrap(auth.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return false;
+        }
         int ret = ComHaSdkLibrary.INSTANCE.HA_WriteCustomerAuthCode(mCamera, buffer, size);
         return ret == 0;
     }
@@ -849,25 +895,36 @@ public class FaceSdk {
     public NetInfo getNetConfig() {
         SystemNetInfo netInfo = new SystemNetInfo();
         int ret = ComHaSdkLibrary.INSTANCE.HA_GetNetConfig(mCamera, netInfo);
-        return ret == 0 ? new NetInfo(
-                new String(netInfo.ip_addr).trim(),
-                new String(netInfo.mac_addr).trim(),
-                new String(netInfo.gateway).trim(),
-                new String(netInfo.netmask).trim()
-        ) : null;
+        try {
+            return ret == 0 ? new NetInfo(
+                    new String(netInfo.ip_addr,"UTF-8").trim(),
+                    new String(netInfo.mac_addr,"UTF-8").trim(),
+                    new String(netInfo.gateway,"UTF-8").trim(),
+                    new String(netInfo.netmask,"UTF-8").trim()
+            ) : null;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
      * 设置相机的网络参数
-     * @param netInfo  netInfo
+     *
+     * @param netInfo netInfo
      * @return true
      */
     public boolean setNetConfig(NetInfo netInfo) {
         SystemNetInfo info = new SystemNetInfo();
-        info.ip_addr = netInfo.getIpAddr().getBytes();
-        info.mac_addr = netInfo.getMacAddr().getBytes();
-        info.gateway = netInfo.getGateway().getBytes();
-        info.netmask = netInfo.getNetmask().getBytes();
+        try {
+            info.ip_addr = netInfo.getIpAddr().getBytes("UTF-8");
+            info.mac_addr = netInfo.getMacAddr().getBytes("UTF-8");
+            info.gateway = netInfo.getGateway().getBytes("UTF-8");
+            info.netmask = netInfo.getNetmask().getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return false;
+        }
         int ret = ComHaSdkLibrary.INSTANCE.HA_SetNetConfig(mCamera, info);
         return ret == 0;
     }
