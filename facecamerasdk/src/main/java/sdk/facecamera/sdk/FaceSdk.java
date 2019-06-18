@@ -960,10 +960,10 @@ public class FaceSdk {
                 systemInfo.setPlateform(new String(info.plateform,"UTF-8").trim());
                 systemInfo.setSensorType(new String(info.sensor_type,"UTF-8").trim());
                 systemInfo.setMinSdkVer(new String(info.min_sdk_ver,"UTF-8").trim());
-                systemInfo.setResv(new String(info.resv,"UTF-8").trim());
-                systemInfo.setResv(new String(info.protocol_ver,"UTF-8").trim());
                 systemInfo.setSystempType(new String(info.systemp_type,"UTF-8").trim());
                 systemInfo.setMinClientver(info.min_client_ver);
+//                systemInfo.setKernelVersion(new String(info.kernel_version,"UTF-8").trim() );
+//                systemInfo.setLcdType(new String(info.lcd_type,"UTF-8").trim() );
                 return systemInfo;
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();

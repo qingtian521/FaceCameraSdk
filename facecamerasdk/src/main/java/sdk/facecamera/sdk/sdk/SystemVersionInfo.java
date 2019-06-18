@@ -14,64 +14,71 @@ public class SystemVersionInfo extends Structure {
 	 * \u8bbe\u5907\u5e8f\u5217\u53f7<br>
 	 * C type : char[32]
 	 */
-	public byte[] dev_id = new byte[32];
+	public byte[] dev_id = new byte[32];//设备序列号
 	/**
 	 * \u534f\u8bae\u7248\u672c<br>
 	 * C type : char[8]
 	 */
-	public byte[] protocol_ver = new byte[8];
+	public byte[] protocol_ver = new byte[8]; //协议版本
 	/**
 	 * \u56fa\u4ef6\u7248\u672c<br>
 	 * C type : char[16]
 	 */
-	public byte[] firmware_ver = new byte[16];
+	public byte[] firmware_ver = new byte[16]; //固件版本
 	/**
 	 * \u5e94\u7528\u7a0b\u5e8f\u7248\u672c<br>
 	 * C type : char[8]
 	 */
-	public byte[] code_ver = new byte[8];
+	public byte[] code_ver = new byte[8];//应用程序版本
 	/**
 	 * \u5e94\u7528\u7f16\u8bd1\u65f6\u95f4<br>
 	 * C type : char[20]
 	 */
-	public byte[] build_time = new byte[20];
+	public byte[] build_time = new byte[20];//应用编译时间
 	/**
 	 * \u4fdd\u7559<br>
 	 * C type : char[16]
 	 */
-	public byte[] resv = new byte[16];
+	public byte[] resv = new byte[16];  //保留
 	/**
 	 * \u7cfb\u7edf\u7c7b\u578b<br>
 	 * C type : char[16]
 	 */
-	public byte[] systemp_type = new byte[16];
+	public byte[] systemp_type = new byte[16]; //系统类型
 	/**
 	 * \u786c\u4ef6\u5e73\u53f0<br>
 	 * C type : char[16]
 	 */
-	public byte[] plateform = new byte[16];
+	public byte[] plateform = new byte[16]; //硬件平台
 	/**
 	 * \u4f20\u611f\u5668\u578b\u53f7<br>
 	 * C type : char[16]
 	 */
-	public byte[] sensor_type = new byte[16];
+	public byte[] sensor_type = new byte[16];//传感器型号
 	/**
 	 * \u7b97\u6cd5\u7248\u672c<br>
 	 * C type : char[16]
 	 */
-	public byte[] algorithm_ver = new byte[16];
+	public byte[] algorithm_ver = new byte[16]; //算法版本
 	/**
 	 * \u6700\u4f4esdk\u7248\u672c<br>
 	 * C type : char[16]
 	 */
-	public byte[] min_sdk_ver = new byte[16];
+	public byte[] min_sdk_ver = new byte[16];//最低sdk版本
 	/** \u6700\u4f4e\u5ba2\u6237\u7aef\u7248\u672c */
-	public int min_client_ver;
+	public int min_client_ver;//最低客户端版本
+
+	public byte[]  kernel_version = new byte[128];//内核版本
+
+	public byte[]  lcd_type = new byte[32];//LCD屏型号
+
+	public byte[]  recv = new byte[512];//保留
+
 	public SystemVersionInfo() {
 		super();
 	}
 	protected List<String> getFieldOrder() {
-		return Arrays.asList("dev_id", "protocol_ver", "firmware_ver", "code_ver", "build_time", "resv", "systemp_type", "plateform", "sensor_type", "algorithm_ver", "min_sdk_ver", "min_client_ver");
+		return Arrays.asList("dev_id", "protocol_ver", "firmware_ver", "code_ver", "build_time", "resv", "systemp_type", "plateform", "sensor_type", "algorithm_ver", "min_sdk_ver", "min_client_ver","kernel_version","lcd_type","recv");
 	}
 	public static class ByReference extends SystemVersionInfo implements Structure.ByReference {
 		
