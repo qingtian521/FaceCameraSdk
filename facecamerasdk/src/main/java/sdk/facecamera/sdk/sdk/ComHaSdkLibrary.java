@@ -20,7 +20,6 @@ import java.nio.ShortBuffer;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-//@SuppressWarnings("DeprecatedIsStillUsed")
 public interface ComHaSdkLibrary extends Library {
 	public static final String JNA_LIBRARY_NAME = "hasdk";
 	public static final NativeLibrary JNA_NATIVE_LIB = NativeLibrary.getInstance(ComHaSdkLibrary.JNA_LIBRARY_NAME);
@@ -909,7 +908,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : discover_client.h:15</i><br>
 	 * @deprecated use the safer methods {@link #discover_setip_bymac(String, String, String, String)} and {@link #discover_setip_bymac(Pointer, Pointer, Pointer, Pointer)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	void discover_setip_bymac(Pointer mac, Pointer ip, Pointer netmask, Pointer gateway);
 	/**
 	 * Original signature : <code>void discover_setip_bymac(const char*, const char*, const char*, const char*)</code><br>
@@ -936,7 +935,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:58</i><br>
 	 * @deprecated use the safer methods {@link #HA_VersionToInt(ByteBuffer)} and {@link #HA_VersionToInt(Pointer)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_VersionToInt(Pointer version);
 	/**
 	 * @brief   \u5c06sdk\u7248\u672c\u8f6c\u6362\u6210int\u7c7b\u578b
@@ -996,7 +995,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:94</i><br>
 	 * @deprecated use the safer methods {@link #HA_InitFaceModel(String)} and {@link #HA_InitFaceModel(Pointer)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_InitFaceModel(Pointer faceModel);
 	/**
 	 * @brief   \u4eba\u8138\u63d0\u53d6\u5668\u521d\u59cb\u5316\uff0c\u591a\u4e2a\u76f8\u673a\u65f6\u4e5f\u53ea\u9700\u8981\u521d\u59cb\u5316\u4e00\u6b21
@@ -1270,7 +1269,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:277</i><br>
 	 * @deprecated use the safer methods {@link #HA_QueryOfflineEntryTimeByPlate(com.ha.sdk.ComHaSdkLibrary.HA_Cam, String)} and {@link #HA_QueryOfflineEntryTimeByPlate(com.ha.sdk.ComHaSdkLibrary.HA_Cam, Pointer)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	void HA_QueryOfflineEntryTimeByPlate(HA_Cam cam, Pointer plate);
 	/**
 	 * @brief   \u5728\u8131\u673a\u8fdb\u5728\u7ebf\u51fa\u65f6\uff0c\u6839\u636e\u8f66\u724c\u67e5\u8be2\u8f66\u8f86\u5165\u573a\u8bb0\u5f55
@@ -1314,7 +1313,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:294</i><br>
 	 * @deprecated use the safer methods {@link #HA_QueryOfflineFeeDataCountAndMoney(com.ha.sdk.ComHaSdkLibrary.HA_Cam, String, String, int, Pointer, IntBuffer, FloatBuffer)} and {@link #HA_QueryOfflineFeeDataCountAndMoney(com.ha.sdk.ComHaSdkLibrary.HA_Cam, Pointer, Pointer, int, Pointer, IntByReference, FloatByReference)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_QueryOfflineFeeDataCountAndMoney(HA_Cam cam, Pointer pStartTime, Pointer pEndTime, int queryStyle, Pointer pPlateOrVehicleType, IntByReference pCount, FloatByReference pMoneyTotal);
 	/**
 	 * @brief \u6839\u636e(\u65f6\u95f4+\u8f66\u724c\u53f7)\u6216\u8005(\u65f6\u95f4+\u8f66\u8f86\u7c7b\u578b)\u67e5\u8be2\u8131\u673a\u6536\u8d39\u8bb0\u5f55\u6761\u6570\u548c\u603b\u91d1\u989d
@@ -1376,7 +1375,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:312</i><br>
 	 * @deprecated use the safer methods {@link #HA_QueryOfflineFeeDataByPage(com.ha.sdk.ComHaSdkLibrary.HA_Cam, String, String, int, Pointer, int, int)} and {@link #HA_QueryOfflineFeeDataByPage(com.ha.sdk.ComHaSdkLibrary.HA_Cam, Pointer, Pointer, int, Pointer, int, int)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_QueryOfflineFeeDataByPage(HA_Cam cam, Pointer pStartTime, Pointer pEndTime, int queryStyle, Pointer pPlateOrVehicleType, int startPos, int endPos);
 	/**
 	 * @brief \u6839\u636e(\u65f6\u95f4+\u8f66\u724c\u53f7)\u6216\u8005(\u65f6\u95f4+\u8f66\u8f86\u7c7b\u578b)\u6309\u9875\u67e5\u8be2\u8131\u673a\u6536\u8d39\u8bb0\u5f55
@@ -1456,7 +1455,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:348</i><br>
 	 * @deprecated use the safer methods {@link #HA_SetIpBymac(String, String, String, String)} and {@link #HA_SetIpBymac(Pointer, Pointer, Pointer, Pointer)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	void HA_SetIpBymac(Pointer mac, Pointer ip, Pointer netmask, Pointer gateway);
 	/**
 	 * @brief   \u901a\u8fc7mac\u5730\u5740\uff0c\u8de8\u7f51\u6bb5\u8bbe\u7f6e\u76f8\u673aIP
@@ -1530,7 +1529,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:389</i><br>
 	 * @deprecated use the safer methods {@link #HA_Connect(String, short, String, String, IntBuffer)} and {@link #HA_Connect(Pointer, short, Pointer, Pointer, IntByReference)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	HA_Cam HA_Connect(Pointer ip, short port, Pointer usrName, Pointer password, IntByReference errorNum);
 	/**
 	 * @brief   \u8fde\u63a5\u76f8\u673a\u3002\u8bf7\u7528HA_ConnectEx\u66ff\u4ee3   
@@ -1580,7 +1579,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:406</i><br>
 	 * @deprecated use the safer methods {@link #HA_ConnectEx(String, short, String, String, IntBuffer, int, int)} and {@link #HA_ConnectEx(Pointer, short, Pointer, Pointer, IntByReference, int, int)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	HA_Cam HA_ConnectEx(Pointer ip, short port, Pointer usrName, Pointer password, IntByReference errorNum, int channel, int autoReconn);
 	/**
 	 * @brief   \u8fde\u63a5\u76f8\u673a
@@ -1624,7 +1623,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:416</i><br>
 	 * @deprecated use the safer methods {@link #HA_ModifyUserNamePasswd(com.ha.sdk.ComHaSdkLibrary.HA_Cam, String, String, String, String)} and {@link #HA_ModifyUserNamePasswd(com.ha.sdk.ComHaSdkLibrary.HA_Cam, Pointer, Pointer, Pointer, Pointer)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_ModifyUserNamePasswd(HA_Cam cam, Pointer usrNameOld, Pointer passwordOld, Pointer usrNameNew, Pointer passwordNew);
 	/**
 	 * @brief   \u4fee\u6539\u7528\u6237\u540d\u548c\u5bc6\u7801
@@ -1834,7 +1833,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:552</i><br>
 	 * @deprecated use the safer methods {@link #HA_CapImgToFile(com.ha.sdk.ComHaSdkLibrary.HA_Cam, String)} and {@link #HA_CapImgToFile(com.ha.sdk.ComHaSdkLibrary.HA_Cam, Pointer)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_CapImgToFile(HA_Cam cam, Pointer fileName);
 	/**
 	 * @brief   \u89c6\u9891\u6d41\u622a\u56fe\uff0c\u5e76\u6309\u4f20\u5165\u7684\u6587\u4ef6\u540d\u4fdd\u5b58\u56fe\u7247\uff0c\u540e\u7f00\u53ef\u4ee5\u4e3abmp\uff0cjpg\uff0c\u591a\u7ea7\u8def\u5f84\u8bf7\u81ea\u884c\u5efa\u7acb
@@ -1868,7 +1867,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:564</i><br>
 	 * @deprecated use the safer methods {@link #HA_CapImgToBuffer(com.ha.sdk.ComHaSdkLibrary.HA_Cam, ByteBuffer, int, IntBuffer)} and {@link #HA_CapImgToBuffer(com.ha.sdk.ComHaSdkLibrary.HA_Cam, Pointer, int, IntByReference)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_CapImgToBuffer(HA_Cam cam, Pointer buffer, int bufferSize, IntByReference len);
 	/**
 	 * @brief   \u89c6\u9891\u6d41\u622a\u56fe, \u5e76\u5c06\u6570\u636e\u4fdd\u5b58\u7684\u5185\u5b58\u4e2d\u3002\u5185\u5b58\u6570\u636e\u4e3ajpg
@@ -1936,7 +1935,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:597</i><br>
 	 * @deprecated use the safer methods {@link #HA_GetWhiteList(com.ha.sdk.ComHaSdkLibrary.HA_Cam, com.ha.sdk.HA_AllowList, int, IntBuffer)} and {@link #HA_GetWhiteList(com.ha.sdk.ComHaSdkLibrary.HA_Cam, com.ha.sdk.HA_AllowList, int, IntByReference)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_GetWhiteList(HA_Cam cam, HA_AllowList allowList, int maxNum, IntByReference listNum);
 	/**
 	 * @brief   \u83b7\u53d6\u767d\u540d\u5355
@@ -1978,7 +1977,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:611</i><br>
 	 * @deprecated use the safer methods {@link #HA_GetWhiteListByPage(com.ha.sdk.ComHaSdkLibrary.HA_Cam, int, int, com.ha.sdk.HA_AllowList, IntBuffer, IntBuffer)} and {@link #HA_GetWhiteListByPage(com.ha.sdk.ComHaSdkLibrary.HA_Cam, int, int, com.ha.sdk.HA_AllowList, IntByReference, IntByReference)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_GetWhiteListByPage(HA_Cam cam, int pageNum, int recordNumPerPage, HA_AllowList allowList, IntByReference listNum, IntByReference totalPages);
 	/**
 	 * @brief   \u6309\u9875\u67e5\u8be2\u767d\u540d\u5355
@@ -2056,7 +2055,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:650</i><br>
 	 * @deprecated use the safer methods {@link #HA_DeleteWhiteListByPlate(com.ha.sdk.ComHaSdkLibrary.HA_Cam, String)} and {@link #HA_DeleteWhiteListByPlate(com.ha.sdk.ComHaSdkLibrary.HA_Cam, Pointer)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_DeleteWhiteListByPlate(HA_Cam cam, Pointer plate);
 	/**
 	 * @brief   \u5220\u9664\u767d\u540d\u5355\u4fe1\u606f
@@ -2086,7 +2085,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:660</i><br>
 	 * @deprecated use the safer methods {@link #HA_SearchWhiteListByPlate(com.ha.sdk.ComHaSdkLibrary.HA_Cam, String, com.ha.sdk.HA_AllowList)} and {@link #HA_SearchWhiteListByPlate(com.ha.sdk.ComHaSdkLibrary.HA_Cam, Pointer, com.ha.sdk.HA_AllowList)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_SearchWhiteListByPlate(HA_Cam cam, Pointer plate, HA_AllowList wList);
 	/**
 	 * @brief   \u67e5\u627e\u767d\u540d\u5355\u4fe1\u606f
@@ -2144,6 +2143,15 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:689</i>
 	 */
 	int HA_GetFaceSystemVersion(HA_Cam cam, SystemVersionInfo version);
+
+	/**
+	 * @brief   获取人脸相机固件信息
+	 * @param   cam[in]   相机句柄
+	 * @param   version[out] 固件版本信息
+	 * @return  0 获取成功
+	 * @return  <0 获取失败
+	 */
+	int HA_GetFaceSystemVersionEx(HA_Cam cam, SystemVersionInfo version);
 	/**
 	 * @brief   \u83b7\u53d6\u76f8\u673a\u7cfb\u7edf\u65f6\u95f4
 <br>
@@ -2190,7 +2198,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:718</i><br>
 	 * @deprecated use the safer methods {@link #HA_GetSystemVersionEX(com.ha.sdk.ComHaSdkLibrary.HA_Cam, com.ha.sdk.VERSION, String, String)} and {@link #HA_GetSystemVersionEX(com.ha.sdk.ComHaSdkLibrary.HA_Cam, com.ha.sdk.VERSION, Pointer, Pointer)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_GetSystemVersionEX(HA_Cam cam, VERSION version, Pointer usrName, Pointer password);
 	/**
 	 * @brief   \u83b7\u53d6\u7cfb\u7edf\u7248\u672c\u4fe1\u606f
@@ -3902,7 +3910,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * @return  0 \u83b7\u53d6\u6210\u529f              
 <br>
 	 * @return  <0 \u83b7\u53d6\u5931\u8d25  \u53c2\u8003\u9519\u8bef\u7801<br>
-	 * Original signature : <code>int HA_GetNetConfig(HA_Cam*, SystemNetInfo*)</code><br>
+	 * Original signature : <code>int HA_GetNetConfig(HA_Cam*, NetInfo*)</code><br>
 	 * <i>native declaration : HASdk.h:1436</i>
 	 */
 	int HA_GetNetConfig(HA_Cam cam, SystemNetInfo netInfo);
@@ -3916,7 +3924,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * @return  0 \u8bbe\u7f6e\u6210\u529f              
 <br>
 	 * @return  <0 \u8bbe\u7f6e\u5931\u8d25  \u53c2\u8003\u9519\u8bef\u7801<br>
-	 * Original signature : <code>int HA_SetNetConfig(HA_Cam*, SystemNetInfo*)</code><br>
+	 * Original signature : <code>int HA_SetNetConfig(HA_Cam*, NetInfo*)</code><br>
 	 * <i>native declaration : HASdk.h:1445</i>
 	 */
 	int HA_SetNetConfig(HA_Cam cam, SystemNetInfo netInfo);
@@ -6221,7 +6229,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:2470</i><br>
 	 * @deprecated use the safer methods {@link #HA_AddJpgFace(com.ha.sdk.ComHaSdkLibrary.HA_Cam, com.ha.sdk.FaceFlags, byte[], int)} and {@link #HA_AddJpgFace(com.ha.sdk.ComHaSdkLibrary.HA_Cam, com.ha.sdk.FaceFlags, Pointer, int)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_AddJpgFace(HA_Cam cam, FaceFlags faceID, Pointer jpg, int len);
 	/**
 	 * @brief \u6ce8\u518c\u4eba\u8138\u5230\u76f8\u673a\uff0c\u6ce8\u518c\u56fe\u50cf\u5c3a\u5bf8\u8981\u6c42\u5927\u4e8e100*100\uff0c\u6ce8\u518c\u4eba\u8138\u5c3a\u5bf8\u5927\u4e8e80*80
@@ -6506,7 +6514,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:2598</i><br>
 	 * @deprecated use the safer methods {@link #HA_ModifyJpgFace(com.ha.sdk.ComHaSdkLibrary.HA_Cam, com.ha.sdk.FaceFlags, byte[], int)} and {@link #HA_ModifyJpgFace(com.ha.sdk.ComHaSdkLibrary.HA_Cam, com.ha.sdk.FaceFlags, Pointer, int)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_ModifyJpgFace(HA_Cam cam, FaceFlags faceID, Pointer jpg, int len);
 	/**
 	 * @brief \u4fee\u6539\u4eba\u8138\u7279\u5f81\uff0c\u6216\u8005\u4eba\u8138\u59d3\u540d
@@ -6560,7 +6568,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:2620</i><br>
 	 * @deprecated use the safer methods {@link #HA_ModifyFace(com.ha.sdk.ComHaSdkLibrary.HA_Cam, com.ha.sdk.FaceFlags, byte[], int, int)} and {@link #HA_ModifyFace(com.ha.sdk.ComHaSdkLibrary.HA_Cam, com.ha.sdk.FaceFlags, Pointer, int, int)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_ModifyFace(HA_Cam cam, FaceFlags faceID, Pointer rgbimage, int width, int height);
 	/**
 	 * @brief \u4fee\u6539\u4eba\u8138\u7279\u5f81\uff0c\u6216\u8005\u4eba\u8138\u59d3\u540d
@@ -6602,7 +6610,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:2633</i><br>
 	 * @deprecated use the safer methods {@link #HA_ModifyFacePacket(com.ha.sdk.ComHaSdkLibrary.HA_Cam, com.ha.sdk.FaceFlags, FloatBuffer, int, int, com.ha.sdk.FaceImage, int)} and {@link #HA_ModifyFacePacket(com.ha.sdk.ComHaSdkLibrary.HA_Cam, com.ha.sdk.FaceFlags, FloatByReference, int, int, com.ha.sdk.FaceImage, int)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_ModifyFacePacket(HA_Cam cam, FaceFlags faceID, FloatByReference features, int features_size, int features_num, FaceImage imgs, int img_num);
 	/**
 	 * @brief \u4fee\u6539\u4eba\u8138\u7279\u5f81\uff0c\u6216\u8005\u4eba\u8138\u59d3\u540d
@@ -6638,7 +6646,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:2650</i><br>
 	 * @deprecated use the safer methods {@link #HA_DeleteFaceDataByPersonID(com.ha.sdk.ComHaSdkLibrary.HA_Cam, String)} and {@link #HA_DeleteFaceDataByPersonID(com.ha.sdk.ComHaSdkLibrary.HA_Cam, Pointer)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_DeleteFaceDataByPersonID(HA_Cam cam, Pointer personID);
 	/**
 	 * @brief \u5220\u9664\u4e00\u4e2a\u4eba\u5458\u4fe1\u606f
@@ -6764,7 +6772,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:2723</i><br>
 	 * @deprecated use the safer methods {@link #HA_GetJpgFaceFeature(byte[], int, FloatBuffer, IntBuffer)} and {@link #HA_GetJpgFaceFeature(Pointer, int, FloatByReference, IntByReference)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_GetJpgFaceFeature(Pointer jpg, int len, FloatByReference feature, IntByReference feature_size);
 	/**
 	 * @brief \u63d0\u53d6\u4eba\u8138\u7279\u5f81\u503c
@@ -6796,7 +6804,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:2743</i><br>
 	 * @deprecated use the safer methods {@link #HA_GetMatchScores(float[], float[], int)} and {@link #HA_GetMatchScores(FloatByReference, FloatByReference, int)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_GetMatchScores(FloatByReference f1, FloatByReference f2, int feature_size);
 	/**
 	 * @brief \u83b7\u53d6\u4e24\u4e2a\u7279\u5f81\u503c\u7684\u5339\u914d\u5206\u6570
@@ -6834,7 +6842,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:2756</i><br>
 	 * @deprecated use the safer methods {@link #HA_GetJpgFaceRectAndFeature(byte[], int, FloatBuffer, IntBuffer, com.ha.sdk.ha_rect, ByteBuffer, IntBuffer)} and {@link #HA_GetJpgFaceRectAndFeature(Pointer, int, FloatByReference, IntByReference, com.ha.sdk.ha_rect, Pointer, IntByReference)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_GetJpgFaceRectAndFeature(Pointer jpg, int len, FloatByReference feature, IntByReference feature_size, ha_rect faceRect, Pointer faceImgJpg, IntByReference faceJpgLen);
 	/**
 	 * @brief \u63d0\u53d6\u4eba\u8138\u7279\u5f81\u503c
@@ -6878,7 +6886,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:2768</i><br>
 	 * @deprecated use the safer methods {@link #HA_GetJpgPathRectAndFeature(byte[], FloatBuffer, IntBuffer, com.ha.sdk.ha_rect, ByteBuffer, IntBuffer)} and {@link #HA_GetJpgPathRectAndFeature(Pointer, FloatByReference, IntByReference, com.ha.sdk.ha_rect, Pointer, IntByReference)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_GetJpgPathRectAndFeature(Pointer img_path, FloatByReference feature, IntByReference feature_size, ha_rect faceRect, Pointer faceImgJpg, IntByReference faceJpgLen);
 	/**
 	 * @brief \u63d0\u53d6\u4eba\u8138\u7279\u5f81\u503c
@@ -6924,7 +6932,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:2782</i><br>
 	 * @deprecated use the safer methods {@link #HA_GetFaceRectAndFeature(byte[], int, int, FloatBuffer, IntBuffer, com.ha.sdk.ha_rect, ByteBuffer, IntBuffer)} and {@link #HA_GetFaceRectAndFeature(Pointer, int, int, FloatByReference, IntByReference, com.ha.sdk.ha_rect, Pointer, IntByReference)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_GetFaceRectAndFeature(Pointer rgbimage, int width, int height, FloatByReference feature, IntByReference feature_size, ha_rect faceRect, Pointer faceImgJpg, IntByReference faceJpgLen);
 	/**
 	 * @brief \u63d0\u53d6\u4eba\u8138\u7279\u5f81\u503c
@@ -6968,7 +6976,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:2793</i><br>
 	 * @deprecated use the safer methods {@link #HA_GetJpgPathTwist(byte[], ByteBuffer, IntBuffer, IntBuffer, IntBuffer)} and {@link #HA_GetJpgPathTwist(Pointer, Pointer, IntByReference, IntByReference, IntByReference)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_GetJpgPathTwist(Pointer img_path, Pointer twist_image, IntByReference twist_size, IntByReference twist_width, IntByReference twist_height);
 	/**
 	 * @brief \u63d0\u53d6\u5f52\u4e00\u5316\u56fe\u50cf
@@ -7008,7 +7016,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:2805</i><br>
 	 * @deprecated use the safer methods {@link #HA_GetJpgFaceTwist(byte[], int, ByteBuffer, IntBuffer, IntBuffer, IntBuffer)} and {@link #HA_GetJpgFaceTwist(Pointer, int, Pointer, IntByReference, IntByReference, IntByReference)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_GetJpgFaceTwist(Pointer jpg, int len, Pointer twist_image, IntByReference twist_size, IntByReference twist_width, IntByReference twist_height);
 	/**
 	 * @brief \u63d0\u53d6\u4eba\u8138\u7279\u5f81\u503c
@@ -7052,7 +7060,7 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:2818</i><br>
 	 * @deprecated use the safer methods {@link #HA_GetFaceTwist(byte[], int, int, ByteBuffer, IntBuffer, IntBuffer, IntBuffer)} and {@link #HA_GetFaceTwist(Pointer, int, int, Pointer, IntByReference, IntByReference, IntByReference)} instead
 	 */
-	@Deprecated 
+	@Deprecated
 	int HA_GetFaceTwist(Pointer bgrimage, int width, int height, Pointer twist_image, IntByReference twist_size, IntByReference twist_width, IntByReference twist_height);
 	/**
 	 * @brief \u63d0\u53d6\u5f52\u4e00\u5316\u56fe\u50cf

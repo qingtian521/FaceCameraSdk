@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sdk.facecamera.sdk.pojos.DeviceModel;
+import sdk.facecamera.sdk.pojos.DeviceSystemInfo;
 import sdk.facecamera.sdk.pojos.FaceInfo;
 import sdk.facecamera.sdk.pojos.NetInfo;
 import sdk.facecamera.sdk.pojos.QueryFaceModel;
@@ -30,6 +31,7 @@ import sdk.facecamera.sdk.sdk.HA_LiveStream;
 import sdk.facecamera.sdk.sdk.QueryCondition;
 import sdk.facecamera.sdk.sdk.QueryFaceInfo;
 import sdk.facecamera.sdk.sdk.SystemNetInfo;
+import sdk.facecamera.sdk.sdk.SystemVersionInfo;
 import sdk.facecamera.sdk.sdk.ha_rect;
 import sdk.facecamera.sdk.sdk.ipscan_t;
 import sdk.facecamera.sdk.utils.H264Decoder;
@@ -353,8 +355,19 @@ public class FaceSdk {
             ComHaSdkLibrary.INSTANCE.HA_ClearAllCallbacks(mCamera);
             ComHaSdkLibrary.INSTANCE.HA_DisConnect(mCamera);
         }
+        stopVideoPlay();
 //        mContext = null;
+        //清除使用过的对象
+        mFaceInfoCb = null;
+        mConnectCb = null;
+        streamDataCb = null;
+        connectEventCb = null;
+        faceRecoCb = null;
+        faceQueryCb = null;
+        faceModelList = null;
         initialized = false;
+        mQueryPageCallBack = null;
+        mFaceSdk = null;
     }
 
     /**
@@ -384,7 +397,7 @@ public class FaceSdk {
      */
     public boolean startVideoPlay(SurfaceView surfaceView) {
         if (_played) return false;
-        mDecoder = new H264Decoder(surfaceView.getHolder(),surfaceView.getContext());
+        mDecoder = new H264Decoder(surfaceView.getHolder(),surfaceView.getContext().getApplicationContext());
         mDecoder.play();
         _played = true;
         return true;
@@ -398,6 +411,7 @@ public class FaceSdk {
     public boolean stopVideoPlay() {
         if (mDecoder != null) {
             mDecoder.stopPlay();
+            mDecoder = null;
         }
         _played = false;
         return true;
@@ -912,7 +926,7 @@ public class FaceSdk {
      * 设置相机的网络参数
      *
      * @param netInfo netInfo
-     * @return true
+     * @return truean
      */
     public boolean setNetConfig(NetInfo netInfo) {
         SystemNetInfo info = new SystemNetInfo();
@@ -927,5 +941,35 @@ public class FaceSdk {
         }
         int ret = ComHaSdkLibrary.INSTANCE.HA_SetNetConfig(mCamera, info);
         return ret == 0;
+    }
+
+    /**
+     *获取设备信息
+     */
+    public DeviceSystemInfo getDeviceInfo(){
+        SystemVersionInfo info = new SystemVersionInfo();
+        int ret = ComHaSdkLibrary.INSTANCE.HA_GetFaceSystemVersionEx(mCamera,info);
+        if(ret == 0){
+            try {
+                DeviceSystemInfo systemInfo = new DeviceSystemInfo();
+                systemInfo.setDevId(new String(info.dev_id,"UTF-8").trim());
+                systemInfo.setAlgorithmVer(new String(info.algorithm_ver,"UTF-8").trim());
+                systemInfo.setBuildTime(new String(info.build_time,"UTF-8").trim());
+                systemInfo.setCodeVer(new String(info.code_ver,"UTF-8").trim());
+                systemInfo.setFirmwareVer(new String(info.firmware_ver,"UTF-8").trim());
+                systemInfo.setPlateform(new String(info.plateform,"UTF-8").trim());
+                systemInfo.setSensorType(new String(info.sensor_type,"UTF-8").trim());
+                systemInfo.setMinSdkVer(new String(info.min_sdk_ver,"UTF-8").trim());
+                systemInfo.setResv(new String(info.resv,"UTF-8").trim());
+                systemInfo.setResv(new String(info.protocol_ver,"UTF-8").trim());
+                systemInfo.setSystempType(new String(info.systemp_type,"UTF-8").trim());
+                systemInfo.setMinClientver(info.min_client_ver);
+                return systemInfo;
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return null;
     }
 }
