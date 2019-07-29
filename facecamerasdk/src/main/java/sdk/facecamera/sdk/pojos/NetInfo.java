@@ -7,6 +7,7 @@ public class NetInfo {
     private String gateway;
     private String netmask;
 
+
     public NetInfo(String ipAddr, String macAddr, String gateway, String netmask) {
         this.ipAddr = ipAddr;
         this.macAddr = macAddr;

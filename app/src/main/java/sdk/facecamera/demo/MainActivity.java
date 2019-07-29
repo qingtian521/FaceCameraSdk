@@ -24,6 +24,8 @@ import sdk.facecamera.demo.fragment.HomeFragment;
 import sdk.facecamera.demo.util.LogUtils;
 import sdk.facecamera.demo.util.UiUtil;
 import sdk.facecamera.sdk.FaceSdk;
+import sdk.facecamera.sdk.pojos.NetInfoEx;
+import sdk.facecamera.sdk.sdk.SystemNetInfoEx;
 
 public class MainActivity extends BaseActivity {
 
@@ -57,11 +59,16 @@ public class MainActivity extends BaseActivity {
         mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),mFragments);
         viewPager.setAdapter(mPagerAdapter);
         viewPager.setOffscreenPageLimit(4);
-        boolean ret = FaceSdk.getInstance().Initialize(MainActivity.this,ip);
+        boolean ret = FaceSdk.getInstance().initialize(ip);
         if (ret){
-           LogUtils.e("getFaceAngleEnable" + FaceSdk.getInstance().getFaceAngleEnable());
+//           LogUtils.e("getFaceAngleEnable" + FaceSdk.getInstance().getFaceAngleEnable());
 //           FaceSdk.getInstance().writeCustomerAuthCode("testmyself");
-            FaceSdk.getInstance().getQvalueThresholdEnable();
+           ;
+            NetInfoEx systemNetInfoEx = FaceSdk.getInstance().getNetInfo();
+            if (systemNetInfoEx!= null){
+                FaceSdk.getInstance().setNetInfo(systemNetInfoEx);
+            }
+
 //                    Toast.makeText(getApplicationContext(),"初始化成功",Toast.LENGTH_SHORT).show();
         }else {
 //                    Toast.makeText(getApplicationContext(),"初始化失败",Toast.LENGTH_SHORT).show();
@@ -173,6 +180,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        FaceSdk.getInstance().UnInitialize();
+        FaceSdk.getInstance().unInitialize();
     }
 }

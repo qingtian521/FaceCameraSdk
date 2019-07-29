@@ -4,6 +4,9 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
+
 import sdk.facecamera.demo.crash.CrashHandler;
 
 /**
@@ -16,6 +19,7 @@ public class CameraApplication extends Application{
     private static Handler mHandler;
     private  static Context mContext;
     private static int mainThreadId;
+    private RefWatcher refWatcher;
 
     @Override
     public void onCreate() {
@@ -24,8 +28,21 @@ public class CameraApplication extends Application{
         mHandler = new Handler();
         mContext = getApplicationContext();
         mainThreadId = android.os.Process.myPid();
-
+        refWatcher = setupLeakCanary();
         CrashHandler.getInstance().init(this,true);
+    }
+
+    private RefWatcher setupLeakCanary(){
+        if(LeakCanary.isInAnalyzerProcess(this)) return RefWatcher.DISABLED;
+        return LeakCanary.install(this);
+    }
+
+    /**
+     * 获取RefWatcher
+     */
+    public static RefWatcher getRefWather(Context context) {
+        CameraApplication leakApp = (CameraApplication) context.getApplicationContext();
+        return leakApp.refWatcher;
     }
 
 

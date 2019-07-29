@@ -41,19 +41,21 @@ public class SplashActivity extends BaseActivity {
                 Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                 intent.putExtra("ip",ipStr);
                 startActivity(intent);
-                finish();
             }
         });
+
+
+        FaceSdk.getInstance().addSearchDeviceListener(new FaceSdk.OnSearchDeviceListener() {
+            @Override
+            public void onSearchResult(DeviceModel model) {
+                LogUtils.i(model.getDeviceIp());
+            }
+        });
+
         btSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FaceSdk.getInstance().searchDevice();
-                FaceSdk.getInstance().addSearchDeviceListener(new FaceSdk.OnSearchDeviceListener() {
-                    @Override
-                    public void onSearchResult(DeviceModel model) {
-                        LogUtils.i(model.getDeviceIp());
-                    }
-                });
             }
         });
 

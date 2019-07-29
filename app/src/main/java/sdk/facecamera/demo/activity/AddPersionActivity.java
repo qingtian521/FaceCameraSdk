@@ -22,20 +22,23 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 import sdk.facecamera.demo.R;
+import sdk.facecamera.demo.crash.BaseActivity;
 import sdk.facecamera.demo.util.LogUtils;
 import sdk.facecamera.demo.util.UiUtil;
 import sdk.facecamera.sdk.FaceSdk;
 
-public class AddPersionActivity extends AppCompatActivity {
+public class AddPersionActivity extends BaseActivity {
     private int defaultTime = -1;
-    private EditText id,name,type,number,time;
-    private Button save,cancel;
+    private EditText id, name, type, number, time;
+    private Button save, cancel;
     private ImageView imageView;
     private int RESULT_LOAD_IMAGE = 200;
-    private String idStr,nameStr,typeStr,wieganStr;
-    private int typeNum,wiegandNo;
+    private String idStr, nameStr, typeStr, wieganStr;
+    private int typeNum, wiegandNo;
     private Object[] mObjects;
     private ProgressDialog dialog;
     private Bitmap mFaceBmp;
@@ -60,8 +63,8 @@ public class AddPersionActivity extends AppCompatActivity {
         imageView = findViewById(R.id.image_add);
 
         //设置类型和门禁卡默认值
-        type.setText(0+"");
-        number.setText(0+"");
+        type.setText(0 + "");
+        number.setText(0 + "");
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,16 +91,16 @@ public class AddPersionActivity extends AppCompatActivity {
                 typeStr = type.getText().toString().trim();
                 wieganStr = number.getText().toString().trim();
                 String timeStr = time.getText().toString().trim();
-                if (!timeStr.isEmpty()){
+                if (!timeStr.isEmpty()) {
                     defaultTime = Integer.valueOf(timeStr);
                 }
                 if (idStr.isEmpty() || nameStr.isEmpty() || typeStr.isEmpty()
-                        || wieganStr.isEmpty()){
-                    Toast.makeText(getApplicationContext(),"信息未填写完毕",Toast.LENGTH_SHORT).show();
+                        || wieganStr.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "信息未填写完毕", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (mFaceBmp == null){
-                    Toast.makeText(getApplicationContext(),"还没有选择人脸图片",Toast.LENGTH_SHORT).show();
+                if (mFaceBmp == null) {
+                    Toast.makeText(getApplicationContext(), "还没有选择人脸图片", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -105,12 +108,12 @@ public class AddPersionActivity extends AppCompatActivity {
                 byte[] thumb = baos.toByteArray();
                 typeNum = Integer.valueOf(typeStr);
                 wiegandNo = Integer.valueOf(wieganStr);
-                int ret = FaceSdk.getInstance().addPerson(idStr,nameStr,typeNum,wiegandNo,thumb,defaultTime);
-                if (ret != 0){
-                    Toast.makeText(getApplicationContext(),"注册错误，错误码："+ret,Toast.LENGTH_SHORT).show();
-                    LogUtils.e("注册错误，错误码："+ret);
-                }else {
-                    Toast.makeText(getApplicationContext(),"注册成功"+ret,Toast.LENGTH_SHORT).show();
+                int ret = FaceSdk.getInstance().addPerson(idStr, nameStr, typeNum, wiegandNo, thumb, defaultTime);
+                if (ret != 0) {
+                    Toast.makeText(getApplicationContext(), "注册错误，错误码：" + ret, Toast.LENGTH_SHORT).show();
+                    LogUtils.e("注册错误，错误码：" + ret);
+                } else {
+                    Toast.makeText(getApplicationContext(), "注册成功" + ret, Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
@@ -122,38 +125,40 @@ public class AddPersionActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-            if (requestCode == RESULT_LOAD_IMAGE && null != data){
-                Uri selectedImage = data.getData();
-                mFaceBmp = null;
-                if (selectedImage != null) {
-                    mFaceBmp = getBitmapFormUri(getContentResolver(), selectedImage);
-                    //upload(mFaceBmp);
-                    //imageView.setImageBitmap(mFaceBmp);
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    mFaceBmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] thumb = baos.toByteArray();
+        if (requestCode == RESULT_LOAD_IMAGE && null != data) {
+            Uri selectedImage = data.getData();
+            mFaceBmp = null;
+            if (selectedImage != null) {
+                mFaceBmp = getBitmapFormUri(getContentResolver(), selectedImage);
+                //upload(mFaceBmp);
+                //imageView.setImageBitmap(mFaceBmp);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                mFaceBmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] thumb = baos.toByteArray();
 
-                    //另外一种注册方式，先检测图片再注册
-                    FaceSdk.getInstance().haveFace(thumb,
-                            new FaceSdk.HaveFaceCallBack() {
-                        @Override
-                        public void onFaceSuccess(byte[] faceImg, byte[] twistImg) {
-                            LogUtils.d("有人脸");
-                            imageView.setImageBitmap(BitmapFactory.decodeByteArray(faceImg,0,faceImg.length));
-                            //注册
-                            //int ret = FaceSdk.getInstance().addPersonPacket("11","hello",1,0,faceImg,twistImg)
-                        }
+                //另外一种注册方式，先检测图片再注册
+                FaceSdk.getInstance().haveFace(thumb,
+                        new FaceSdk.HaveFaceCallBack() {
+                            @Override
+                            public void onFaceSuccess(byte[] faceImg, byte[] twistImg) {
+                                LogUtils.d("有人脸");
+                                imageView.setImageBitmap(BitmapFactory.decodeByteArray(faceImg, 0, faceImg.length));
+                                //注册
+                                Calendar oldCal = Calendar.getInstance(TimeZone.getTimeZone("UTC-8:00"));
+                                oldCal.set(1970, 0, 1, 0, 0, 0);
+//                            int ret = FaceSdk.getInstance().addPersonPacket("11","hello",1,0,faceImg,twistImg);
+                            }
 
-                        @Override
-                        public void onFaceFaild(int errorcode) {
-                            LogUtils.d("没有人脸");
-                            Toast.makeText(getApplicationContext(),
-                                    "检测没有人脸,错误码："+errorcode,Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                            @Override
+                            public void onFaceFaild(int errorcode) {
+                                LogUtils.d("没有人脸");
+                                Toast.makeText(getApplicationContext(),
+                                        "检测没有人脸,错误码：" + errorcode, Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
 
-                }
+            }
 
                 /*Cursor cursor = getContentResolver().query(selectedImage,
                         filePathColumn, null, null, null);
@@ -163,7 +168,7 @@ public class AddPersionActivity extends AppCompatActivity {
                 final String picturePath = cursor.getString(columnIndex);
                 upload(picturePath);
                 cursor.close();*/
-            }
+        }
     }
 
     private Bitmap getBitmapFormUri(ContentResolver contentResolver, Uri uri) {
@@ -201,7 +206,7 @@ public class AddPersionActivity extends AppCompatActivity {
             input.close();
 
             return compressImage(bitmap);//再进行质量压缩
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -219,12 +224,11 @@ public class AddPersionActivity extends AppCompatActivity {
             options -= 10;//每次都减少10
         }
         ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
-        Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
-        return bitmap;
+        return BitmapFactory.decodeStream(isBm, null, null);
     }
 
 
-    private void showDialog(){
+    private void showDialog() {
         dialog = new ProgressDialog(AddPersionActivity.this);
         dialog.setMessage("上传中...");
         dialog.show();

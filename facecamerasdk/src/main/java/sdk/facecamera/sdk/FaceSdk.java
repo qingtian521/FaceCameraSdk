@@ -1,11 +1,9 @@
 package sdk.facecamera.sdk;
 
-import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.sun.jna.Memory;
@@ -22,6 +20,7 @@ import sdk.facecamera.sdk.pojos.DeviceModel;
 import sdk.facecamera.sdk.pojos.DeviceSystemInfo;
 import sdk.facecamera.sdk.pojos.FaceInfo;
 import sdk.facecamera.sdk.pojos.NetInfo;
+import sdk.facecamera.sdk.pojos.NetInfoEx;
 import sdk.facecamera.sdk.pojos.QueryFaceModel;
 import sdk.facecamera.sdk.sdk.ComHaSdkLibrary;
 import sdk.facecamera.sdk.sdk.FaceFlags;
@@ -31,6 +30,7 @@ import sdk.facecamera.sdk.sdk.HA_LiveStream;
 import sdk.facecamera.sdk.sdk.QueryCondition;
 import sdk.facecamera.sdk.sdk.QueryFaceInfo;
 import sdk.facecamera.sdk.sdk.SystemNetInfo;
+import sdk.facecamera.sdk.sdk.SystemNetInfoEx;
 import sdk.facecamera.sdk.sdk.SystemVersionInfo;
 import sdk.facecamera.sdk.sdk.ha_rect;
 import sdk.facecamera.sdk.sdk.ipscan_t;
@@ -223,15 +223,19 @@ public class FaceSdk {
     public class HA_LiveStreamCb implements ComHaSdkLibrary.HA_LiveStreamCb_t {
         @Override
         public void apply(ComHaSdkLibrary.HA_Cam cam, String ip, HA_LiveStream stream, int usrParam) {
-            int stream_len = stream.streamLen;
-            byte[] h264 = stream.streamBuf.getByteArray(0, stream_len);
-            mFrameWidth = stream.w;
-            mFrameHeight = stream.h;
+            System.out.println("HA_LiveStreamCb channel = " + stream.channel);
+            if (stream.channel == 0){
+                int stream_len = stream.streamLen;
+                byte[] h264 = stream.streamBuf.getByteArray(0, stream_len);
+
+                       mFrameWidth = stream.w;
+                mFrameHeight = stream.h;
 //            if (mContext == null) {
 //                throw new NullPointerException("you need to initialzie sdk");
 //            }
-            if (_played) {
-                mDecoder.handleH264(h264);
+                if (_played) {
+                    mDecoder.handleH264(h264);
+                }
             }
         }
     }
@@ -367,7 +371,6 @@ public class FaceSdk {
         faceModelList = null;
         initialized = false;
         mQueryPageCallBack = null;
-        mFaceSdk = null;
     }
 
     /**
@@ -906,6 +909,7 @@ public class FaceSdk {
      *
      * @return NetInfo
      */
+
     public NetInfo getNetConfig() {
         SystemNetInfo netInfo = new SystemNetInfo();
         int ret = ComHaSdkLibrary.INSTANCE.HA_GetNetConfig(mCamera, netInfo);
@@ -931,10 +935,10 @@ public class FaceSdk {
     public boolean setNetConfig(NetInfo netInfo) {
         SystemNetInfo info = new SystemNetInfo();
         try {
-            info.ip_addr = netInfo.getIpAddr().getBytes("UTF-8");
-            info.mac_addr = netInfo.getMacAddr().getBytes("UTF-8");
-            info.gateway = netInfo.getGateway().getBytes("UTF-8");
-            info.netmask = netInfo.getNetmask().getBytes("UTF-8");
+            System.arraycopy(netInfo.getIpAddr().getBytes("UTF-8"), 0,info.ip_addr,0,netInfo.getIpAddr().getBytes("UTF-8").length);
+            System.arraycopy(netInfo.getMacAddr().getBytes("UTF-8"), 0,info.mac_addr,0,netInfo.getMacAddr().getBytes("UTF-8").length);
+            System.arraycopy(netInfo.getGateway().getBytes("UTF-8"), 0,info.gateway,0,netInfo.getGateway().getBytes("UTF-8").length);
+            System.arraycopy(netInfo.getNetmask().getBytes("UTF-8"), 0,info.netmask,0,netInfo.getNetmask().getBytes("UTF-8").length);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return false;
@@ -942,6 +946,77 @@ public class FaceSdk {
         int ret = ComHaSdkLibrary.INSTANCE.HA_SetNetConfig(mCamera, info);
         return ret == 0;
     }
+
+    /**
+     * 获取相机的网络参数
+     *
+     * @return NetInfo
+     *     private String mac; //网卡MAC地址
+     *     private String ip; //网卡IP地址
+     *     private String netmask; //网上子网掩码
+     *     private String gateway; // 网关
+     *     private String manufacturer; // 制造商名称
+     *     private String platform;    // 平台名称
+     *     private String system;     // 系统名称
+     *     private String version; // 版本
+     *     private String ip_2;      // 网卡2IP地址
+     *     private String netmask_2;  // 网卡2子网掩码
+     *     private String dns;        // 域名服务器地址
+     *     private boolean dhcp_enable;    // DHCP开关
+     * @return
+     */
+
+    public NetInfoEx getNetInfo(){
+        SystemNetInfoEx netInfo = new SystemNetInfoEx();
+        int ret = ComHaSdkLibrary.INSTANCE.HA_GetNetConfigEx(mCamera,netInfo);
+        NetInfoEx netInfoEx = new NetInfoEx();
+        try {
+            netInfoEx.setMac(new String(netInfo.mac,"UTF-8").trim());
+            netInfoEx.setIp(new String(netInfo.ip,"UTF-8").trim());
+            netInfoEx.setNetmask(new String(netInfo.netmask,"UTF-8").trim());
+            netInfoEx.setGateway(new String(netInfo.gateway,"UTF-8").trim());
+            netInfoEx.setManufacturer(new String(netInfo.manufacturer,"UTF-8").trim());
+            netInfoEx.setPlatform(new String(netInfo.platform,"UTF-8").trim());
+            netInfoEx.setSystem(new String(netInfo.system,"UTF-8").trim());
+            netInfoEx.setVersion(new String(netInfo.version,"UTF-8").trim());
+            netInfoEx.setIp_2(new String(netInfo.ip_2,"UTF-8").trim());
+            netInfoEx.setNetmask_2(new String(netInfo.netmask_2,"UTF-8").trim());
+            netInfoEx.setDns(new String(netInfo.dns,"UTF-8").trim());
+            netInfoEx.setDhcp_enable(netInfo.dhcp_enable == 1);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        System.out.println("ret = " + ret);
+        return netInfoEx;
+    }
+
+    /**
+     * 设置相机的网络参数
+     */
+
+    public boolean setNetInfo(NetInfoEx info){
+        SystemNetInfoEx netInfoEx = new SystemNetInfoEx();
+        try {
+            System.arraycopy(info.getMac().getBytes("UTF-8"),0, netInfoEx.mac,0,info.getMac().getBytes("UTF-8").length);
+            System.arraycopy(info.getIp().getBytes("UTF-8"),0, netInfoEx.ip,0,info.getIp().getBytes("UTF-8").length);
+            System.arraycopy(info.getNetmask().getBytes("UTF-8"),0, netInfoEx.netmask,0,info.getNetmask().getBytes("UTF-8").length);
+            System.arraycopy(info.getGateway().getBytes("UTF-8"),0, netInfoEx.gateway,0,info.getGateway().getBytes("UTF-8").length);
+            System.arraycopy(info.getManufacturer().getBytes("UTF-8"),0, netInfoEx.manufacturer,0,info.getManufacturer().getBytes("UTF-8").length);
+            System.arraycopy(info.getPlatform().getBytes("UTF-8"),0, netInfoEx.platform,0,info.getPlatform().getBytes("UTF-8").length);
+            System.arraycopy(info.getSystem().getBytes("UTF-8"),0, netInfoEx.system,0,info.getSystem().getBytes("UTF-8").length);
+            System.arraycopy(info.getVersion().getBytes("UTF-8"),0, netInfoEx.version,0,info.getVersion().getBytes("UTF-8").length);
+            System.arraycopy(info.getIp_2().getBytes("UTF-8"),0, netInfoEx.ip_2,0,info.getIp_2().getBytes("UTF-8").length);
+            System.arraycopy(info.getNetmask_2().getBytes("UTF-8"),0, netInfoEx.netmask_2,0,info.getNetmask_2().getBytes("UTF-8").length);
+            System.arraycopy(info.getDns().getBytes("UTF-8"),0, netInfoEx.dns,0,info.getDns().getBytes("UTF-8").length);
+            netInfoEx.dhcp_enable = (byte) (info.isDhcp_enable() ? 1:0 );
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        int ret = ComHaSdkLibrary.INSTANCE.HA_SetNetConfigEx(mCamera,netInfoEx);
+        System.out.println("setNetInfo ret = " + ret);
+        return ret == 0;
+    }
+
 
     /**
      *获取设备信息
@@ -967,9 +1042,9 @@ public class FaceSdk {
                 return systemInfo;
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
-                return null;
             }
         }
         return null;
     }
+
 }

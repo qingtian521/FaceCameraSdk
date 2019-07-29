@@ -16,11 +16,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import sdk.facecamera.demo.R;
+import sdk.facecamera.demo.crash.BaseActivity;
 import sdk.facecamera.demo.util.UiUtil;
 import sdk.facecamera.sdk.FaceSdk;
 import sdk.facecamera.sdk.pojos.QueryFaceModel;
 
-public class QueryActivity extends AppCompatActivity implements View.OnClickListener {
+public class QueryActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = "QueryActivity";
     /**
@@ -203,5 +204,11 @@ public class QueryActivity extends AppCompatActivity implements View.OnClickList
         if (mProgDia != null){
             mProgDia.dismiss();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        FaceSdk.getInstance().setQueryCallBack(null);
     }
 }

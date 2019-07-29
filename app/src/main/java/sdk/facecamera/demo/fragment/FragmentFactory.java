@@ -30,4 +30,11 @@ public class FragmentFactory {
 
         return fragment;
     }
+
+    public static void destory(){
+        if (mHashMap!= null){
+            mHashMap.clear();
+            mHashMap = null;
+        }
+    }
 }

@@ -13,7 +13,7 @@ public class HA_LiveStream extends Structure {
 	public int w;
 	public int h;
 	/**
-	 * @see STREAM_FORMAT<br>
+//	 * @see STREAM_FORMAT<br>
 	 * C type : STREAM_FORMAT
 	 */
 	public int format;
@@ -21,11 +21,13 @@ public class HA_LiveStream extends Structure {
 	public int streamBufSize;
 	/** C type : char* */
 	public Pointer streamBuf;
+	public int h264_sequence; // 帧号
+	public byte channel; //通道号 0:主码流 4:子码流
 	public HA_LiveStream() {
 		super();
 	}
 	protected List<String> getFieldOrder() {
-		return Arrays.asList("w", "h", "format", "streamLen", "streamBufSize", "streamBuf");
+		return Arrays.asList("w", "h", "format", "streamLen", "streamBufSize", "streamBuf","h264_sequence","channel");
 	}
 	/**
 	 * @param format @see STREAM_FORMAT<br>

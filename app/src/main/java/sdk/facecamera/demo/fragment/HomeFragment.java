@@ -1,9 +1,11 @@
 package sdk.facecamera.demo.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaCodec;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +19,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +48,7 @@ public class HomeFragment extends BaseFragment{
     private String username;
     private String password;
     private List<PersonModel> personList = new ArrayList<>();
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -53,12 +56,28 @@ public class HomeFragment extends BaseFragment{
             mRecyclerView.smoothScrollToPosition(personList.size()-1);
         }
     };
+//    private Handler mHandler;
     private HomeRecyAdapter recyAdapter;
     private MediaCodec mCodec;
     private boolean isStart; //标志位，判断是否在播放
     private SurfaceHolder holder;
     private MyCallback callback;
     private LibVLCManager mVlcManager;
+
+//    private class MyHandler extends Handler {
+//        private WeakReference<Activity> weakReference;
+//        private Activity activity;
+//        public MyHandler(Activity activity) {
+//            weakReference = new WeakReference<>(activity);
+//            activity = weakReference.get();
+//        }
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            recyAdapter.notifyDataSetChanged();
+//            mRecyclerView.smoothScrollToPosition(personList.size()-1);
+//        }
+//    }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -154,7 +173,7 @@ public class HomeFragment extends BaseFragment{
     private class MyCallback implements SurfaceHolder.Callback {
         @Override
         public void surfaceCreated(SurfaceHolder surfaceHolder) {
-            FaceSdk.getInstance().startVideoPlay(surfaceHolder);
+            FaceSdk.getInstance().startVideoPlay(mSurfaceView);
         }
 
         @Override
@@ -234,4 +253,5 @@ public class HomeFragment extends BaseFragment{
         }
         return true;
     }
+
 }
