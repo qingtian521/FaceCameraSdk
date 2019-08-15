@@ -3965,6 +3965,36 @@ public interface ComHaSdkLibrary extends Library {
 	 */
 	 int  HA_SetNetConfigEx(HA_Cam cam, SystemNetInfoEx netInfo);
 
+	/**
+	 * @brief   相机搜索WiFi列表   需注册 HA_RegSearchWiFiCb
+	 * @param   cam[in]   相机句柄
+	 * @param   ssid[in]  填NULL
+	 * @return  0 设置成功
+	 * @return  <0 设置失败  参考错误码
+	 */
+	 int  HA_SearchWifi(HA_Cam cam ,String ssid);
+
+/**
+ * @brief   查看已连接wifi信息  需注册 HA_RegSearchWiFiCb
+ * @param   cam[in]   相机句柄
+ * @param   wifiInfor[out]   wifi信息
+ * @return  0 查询成功
+ * @return  <0 查询失败  参考错误码
+ */
+//	 int  HA_WifiInfor(HA_Cam cam,WifiSignal wifiInfor);
+
+/**
+ * @brief   相机连接/断开wifi 注回0 仅代表相机接受此次请求  获取连接状态需注册 HA_RegWifiConnectCb
+ * @param   cam[in]   相机句柄
+ * @param   switchAP[in] 连接失败是否切换为AP模式，0：不切换 !0：切换 安卓调用填1 其他0
+ * @param   ssid[in]   wifi名称  断开时可填NULL
+ * @param   password[in]   wifi密码 断开时可填NULL
+ * @param   enable[in]   连接 0:断开 !0:连接
+ * @return  0 相机已接受此信息成功
+ * @return  <0 相机未处理此信息
+ */
+	 int  HA_ConnectWifi(HA_Cam cam ,byte switchAP , String ssid, String password, byte enable);
+
 
 	@Deprecated
 	int HA_GetLedMode(HA_Cam cam, Pointer led_mode);
