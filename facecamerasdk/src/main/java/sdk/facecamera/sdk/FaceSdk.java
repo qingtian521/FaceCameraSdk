@@ -1024,6 +1024,7 @@ public class FaceSdk {
     public DeviceSystemInfo getDeviceInfo(){
         SystemVersionInfo info = new SystemVersionInfo();
         int ret = ComHaSdkLibrary.INSTANCE.HA_GetFaceSystemVersionEx(mCamera,info);
+        System.out.println("getDeviceSystemInfo ret =" + ret);
         if(ret == 0){
             try {
                 DeviceSystemInfo systemInfo = new DeviceSystemInfo();
@@ -1045,6 +1046,10 @@ public class FaceSdk {
             }
         }
         return null;
+    }
+
+    public int connectWifi(String SSID,String password){
+       return ComHaSdkLibrary.INSTANCE.HA_ConnectWifi(mCamera, (byte) 1,SSID,password,(byte)1);
     }
 
 }
