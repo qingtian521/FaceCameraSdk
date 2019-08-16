@@ -3981,7 +3981,7 @@ public interface ComHaSdkLibrary extends Library {
  * @return  0 查询成功
  * @return  <0 查询失败  参考错误码
  */
-//	 int  HA_WifiInfor(HA_Cam cam,WifiSignal wifiInfor);
+	 int  HA_WifiInfor(HA_Cam cam,WifiSignal wifiInfor);
 
 /**
  * @brief   相机连接/断开wifi 注回0 仅代表相机接受此次请求  获取连接状态需注册 HA_RegWifiConnectCb

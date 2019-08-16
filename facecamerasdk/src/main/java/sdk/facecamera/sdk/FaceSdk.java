@@ -32,6 +32,7 @@ import sdk.facecamera.sdk.sdk.QueryFaceInfo;
 import sdk.facecamera.sdk.sdk.SystemNetInfo;
 import sdk.facecamera.sdk.sdk.SystemNetInfoEx;
 import sdk.facecamera.sdk.sdk.SystemVersionInfo;
+import sdk.facecamera.sdk.sdk.WifiSignal;
 import sdk.facecamera.sdk.sdk.ha_rect;
 import sdk.facecamera.sdk.sdk.ipscan_t;
 import sdk.facecamera.sdk.utils.H264Decoder;
@@ -334,18 +335,21 @@ public class FaceSdk {
         if (initialized) return true;
 //        mContext = context;
         IntBuffer connectErrorNum = IntBuffer.allocate(1);
+        Log.e(TAG, "初始化开始，Initialize start");
         mCamera = ComHaSdkLibrary.INSTANCE.HA_ConnectEx(ip, (short) 9527, null, null, connectErrorNum, 0, 1);
         int errorNum = connectErrorNum.get();
         if (mCamera == null || (errorNum != 0 && errorNum != -35)) {
             Log.e(TAG, "初始化失败，Initialize, faild: errorCode: " + errorNum);
             return false;
         }
-
+        Log.e(TAG, "初始化开始，HA_RegLiveStreamCbEx start");
         ComHaSdkLibrary.INSTANCE.HA_RegLiveStreamCbEx(mCamera, streamDataCb, 0);
+        Log.e(TAG, "初始化开始，HA_RegFaceRecoCb start");
         ComHaSdkLibrary.INSTANCE.HA_RegFaceRecoCb(mCamera, faceRecoCb, Pointer.NULL);
         //注册人员查询
+        Log.e(TAG, "初始化开始，HA_RegFaceQueryCb start");
         ComHaSdkLibrary.INSTANCE.HA_RegFaceQueryCb(mCamera, faceQueryCb, Pointer.NULL);
-
+        Log.e(TAG, "初始化开始，HA_RegConnectEventCbEx start");
         ComHaSdkLibrary.INSTANCE.HA_RegConnectEventCbEx(mCamera, connectEventCb, 0);
         initialized = true;
         return true;
@@ -362,15 +366,15 @@ public class FaceSdk {
         stopVideoPlay();
 //        mContext = null;
         //清除使用过的对象
-        mFaceInfoCb = null;
-        mConnectCb = null;
-        streamDataCb = null;
-        connectEventCb = null;
-        faceRecoCb = null;
-        faceQueryCb = null;
-        faceModelList = null;
+//        mFaceInfoCb = null;
+//        mConnectCb = null;
+//        streamDataCb = null;
+//        connectEventCb = null;
+//        faceRecoCb = null;
+//        faceQueryCb = null;
+//        faceModelList = null;
         initialized = false;
-        mQueryPageCallBack = null;
+//        mQueryPageCallBack = null;
     }
 
     /**
@@ -1050,6 +1054,12 @@ public class FaceSdk {
 
     public int connectWifi(String SSID,String password){
        return ComHaSdkLibrary.INSTANCE.HA_ConnectWifi(mCamera, (byte) 1,SSID,password,(byte)1);
+    }
+
+    public void getWifiInfo(){
+        WifiSignal wifiSignal = new WifiSignal();
+        int ret = ComHaSdkLibrary.INSTANCE.HA_WifiInfor(mCamera,wifiSignal);
+        System.out.println("getWifiInfo 11111111111111111111111111111 ret = " + ret);
     }
 
 }
