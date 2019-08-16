@@ -344,12 +344,9 @@ public class FaceSdk {
         }
         Log.e(TAG, "初始化开始，HA_RegLiveStreamCbEx start");
         ComHaSdkLibrary.INSTANCE.HA_RegLiveStreamCbEx(mCamera, streamDataCb, 0);
-        Log.e(TAG, "初始化开始，HA_RegFaceRecoCb start");
         ComHaSdkLibrary.INSTANCE.HA_RegFaceRecoCb(mCamera, faceRecoCb, Pointer.NULL);
         //注册人员查询
-        Log.e(TAG, "初始化开始，HA_RegFaceQueryCb start");
         ComHaSdkLibrary.INSTANCE.HA_RegFaceQueryCb(mCamera, faceQueryCb, Pointer.NULL);
-        Log.e(TAG, "初始化开始，HA_RegConnectEventCbEx start");
         ComHaSdkLibrary.INSTANCE.HA_RegConnectEventCbEx(mCamera, connectEventCb, 0);
         initialized = true;
         return true;
