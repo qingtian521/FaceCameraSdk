@@ -41,7 +41,7 @@ import sdk.facecamera.sdk.utils.StringUtil;
 public class FaceSdk {
     private static final String TAG = "FaceSdk";
 
-    static {
+    {
         try {
             //  FIXME 需要load以下的so文件
             System.loadLibrary("hasdk");
@@ -49,6 +49,7 @@ public class FaceSdk {
             ComHaSdkLibrary.INSTANCE.HA_Init();
             ComHaSdkLibrary.INSTANCE.HA_SetNotifyConnected(1);
             ComHaSdkLibrary.INSTANCE.HA_InitFaceModel((String) null);
+            ComHaSdkLibrary.INSTANCE.HA_RegConnectEventCb(new HA_ConnectEventCb(), 0);
         } catch (Exception ex) {
             Log.e("none", "static initializer: ", ex);
         }
@@ -155,7 +156,7 @@ public class FaceSdk {
 
     private HA_FaceRecoCb faceRecoCb = new HA_FaceRecoCb();
     private HA_LiveStreamCb streamDataCb = new HA_LiveStreamCb();
-    public HA_ConnectEventCb connectEventCb = new HA_ConnectEventCb();
+//    public HA_ConnectEventCb connectEventCb = new HA_ConnectEventCb();
     private HA_FaceQueryCb faceQueryCb = new HA_FaceQueryCb();
 
     public class HA_FaceRecoCb implements ComHaSdkLibrary.HA_FaceRecoCb_t {
@@ -338,7 +339,7 @@ public class FaceSdk {
         Log.e(TAG, "初始化开始，Initialize start");
         mCamera = ComHaSdkLibrary.INSTANCE.HA_ConnectEx(ip, (short) 9527, null, null, connectErrorNum, 0, 1);
         int errorNum = connectErrorNum.get();
-        if (mCamera == null || (errorNum != 0 && errorNum != -35)) {
+        if (mCamera == null || ComHaSdkLibrary.INSTANCE.HA_Connected(mCamera) != 1) {
             Log.e(TAG, "初始化失败，Initialize, faild: errorCode: " + errorNum);
             return false;
         }
@@ -347,7 +348,8 @@ public class FaceSdk {
         ComHaSdkLibrary.INSTANCE.HA_RegFaceRecoCb(mCamera, faceRecoCb, Pointer.NULL);
         //注册人员查询
         ComHaSdkLibrary.INSTANCE.HA_RegFaceQueryCb(mCamera, faceQueryCb, Pointer.NULL);
-        ComHaSdkLibrary.INSTANCE.HA_RegConnectEventCbEx(mCamera, connectEventCb, 0);
+//        ComHaSdkLibrary.INSTANCE.HA_RegConnectEventCbEx(mCamera, connectEventCb, 0);
+
         initialized = true;
         return true;
     }
@@ -360,7 +362,7 @@ public class FaceSdk {
             ComHaSdkLibrary.INSTANCE.HA_ClearAllCallbacks(mCamera);
             ComHaSdkLibrary.INSTANCE.HA_DisConnect(mCamera);
         }
-        stopVideoPlay();
+//        stopVideoPlay();
 //        mContext = null;
         //清除使用过的对象
 //        mFaceInfoCb = null;
@@ -1039,8 +1041,6 @@ public class FaceSdk {
                 systemInfo.setMinSdkVer(new String(info.min_sdk_ver,"UTF-8").trim());
                 systemInfo.setSystempType(new String(info.systemp_type,"UTF-8").trim());
                 systemInfo.setMinClientver(info.min_client_ver);
-//                systemInfo.setKernelVersion(new String(info.kernel_version,"UTF-8").trim() );
-//                systemInfo.setLcdType(new String(info.lcd_type,"UTF-8").trim() );
                 return systemInfo;
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
