@@ -1624,6 +1624,20 @@ public interface ComHaSdkLibrary extends Library {
 	 * <i>native declaration : HASdk.h:416</i><br>
 	 * @deprecated use the safer methods {@link #HA_ModifyUserNamePasswd(com.ha.sdk.ComHaSdkLibrary.HA_Cam, String, String, String, String)} and {@link #HA_ModifyUserNamePasswd(com.ha.sdk.ComHaSdkLibrary.HA_Cam, Pointer, Pointer, Pointer, Pointer)} instead
 	 */
+
+
+	/**
+	 * @brief   连接相机到中转服务器
+	 * @param   ip[in]   服务器ip
+	 * @param   port[in]   服务器端口
+	 * @param   usrName[in]   保留
+	 * @param   password[in]  保留
+	 * @param   errorNum[out]  连接失败错误号，0为连接成功，-1为连接失败
+	 * @return  NULL 连接失败
+	 * @return  非NULL 连接成功
+	 */
+	HA_Cam HA_ConnectRelayServer(String ip, short port, String usrName, String password, IntBuffer errorNum);
+
 	@Deprecated
 	int HA_ModifyUserNamePasswd(HA_Cam cam, Pointer usrNameOld, Pointer passwordOld, Pointer usrNameNew, Pointer passwordNew);
 	/**

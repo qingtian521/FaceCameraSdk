@@ -22,6 +22,10 @@ public class SimpleFaceSdk {
         try {
             System.loadLibrary("hasdk");
             System.loadLibrary("jnidispatch");
+            ComHaSdkLibrary.INSTANCE.HA_Init();
+            ComHaSdkLibrary.INSTANCE.HA_SetNotifyConnected(1);
+            ComHaSdkLibrary.INSTANCE.HA_InitFaceModel((String) null);
+            ComHaSdkLibrary.INSTANCE.HA_RegConnectEventCb(new HA_ConnectEventCb(), 0);
         } catch (Exception ex) {
             Log.e("none", "static initializer: ", ex);
         }
@@ -35,7 +39,6 @@ public class SimpleFaceSdk {
     public interface ConnectEvent{
         void onConnect(String ip,short port,int usrParam);
         void onDisConnect(String ip,short port,int usrParam);
-
     }
 
     public static void setConnectEvent(ConnectEvent connectEvent){
@@ -73,11 +76,20 @@ public class SimpleFaceSdk {
         return mSimpleFaceSdk;
     }
 
-    public void init(){
-        ComHaSdkLibrary.INSTANCE.HA_Init();
-        ComHaSdkLibrary.INSTANCE.HA_SetNotifyConnected(1);
-        ComHaSdkLibrary.INSTANCE.HA_InitFaceModel((String) null);
-        ComHaSdkLibrary.INSTANCE.HA_RegConnectEventCb(new HA_ConnectEventCb(), 0);
+    /**
+     * 初始化相机连接
+     * @param ip 相机ip
+     * @return 结果
+     */
+    public boolean connectVideo(String ip){
+        IntBuffer connectErrorNum = IntBuffer.allocate(1);
+        mCamera = ComHaSdkLibrary.INSTANCE.HA_ConnectEx(ip, (short) 9527, null, null, connectErrorNum, 0, 1);
+        int errorNum = connectErrorNum.get();
+        if (mCamera == null || ComHaSdkLibrary.INSTANCE.HA_Connected(mCamera) != 1) {
+            Log.e(TAG, "初始化失败，Initialize, faild: errorCode: " + errorNum);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -87,10 +99,15 @@ public class SimpleFaceSdk {
      */
     public boolean connect(String ip){
         IntBuffer connectErrorNum = IntBuffer.allocate(1);
-        mCamera = ComHaSdkLibrary.INSTANCE.HA_ConnectEx(ip, (short) 9527, null, null, connectErrorNum, 0, 1);
+        mCamera = ComHaSdkLibrary.INSTANCE.HA_ConnectRelayServer(ip, (short) 9527, null, null, connectErrorNum);
         int errorNum = connectErrorNum.get();
         if (mCamera == null || ComHaSdkLibrary.INSTANCE.HA_Connected(mCamera) != 1) {
             Log.e(TAG, "初始化失败，Initialize, faild: errorCode: " + errorNum);
+            return false;
+        }
+        int ret =  ComHaSdkLibrary.INSTANCE.HA_VerifyCam(mCamera, 9527);
+        if (ret != 0){
+            Log.e(TAG, "验证失败，Initialize, faild: errorCode: " + ret);
             return false;
         }
         return true;
@@ -283,6 +300,7 @@ public class SimpleFaceSdk {
      */
     public void getWifiInfo(){
         WifiSignal wifiSignal = new WifiSignal();
+        System.out.println("LogUtils HA_WifiInfor  start = ");
         int ret = ComHaSdkLibrary.INSTANCE.HA_WifiInfor(mCamera,wifiSignal);
         if (ret == 0){
             try {
@@ -292,14 +310,18 @@ public class SimpleFaceSdk {
                 e.printStackTrace();
             }
         }
-
         System.out.println("LogUtils getWifiInfo  ret = " + ret);
     }
 
     /**
      * 当确定不在使用相机时再调用，在程序退出时
      */
-    public static void deInit(){
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        Log.e("111","11111111111111111111111111111111111111111111111");
         ComHaSdkLibrary.INSTANCE.HA_DeInit();
     }
+
 }

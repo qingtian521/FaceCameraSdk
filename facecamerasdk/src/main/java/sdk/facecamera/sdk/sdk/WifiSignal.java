@@ -13,23 +13,30 @@ import java.util.List;
  */
 public class WifiSignal extends Structure {
 
-	public byte[] ssid = new byte[36]; // wifi名称
-	public int frequency; // 频率 2.4G或5G
-	public int rssi;   				// 信号强度 信号强度在[-126, 0]范围递增，频率为5G时[156, 200)递增
-	public byte[] mac = new byte[20];// MAC地址
-	public int speed;// 加密方式
+    public byte[] ssid = new byte[36]; // wifi名称
+    public int frequency; // 频率 2.4G或5G
+    public int rssi;                // 信号强度 信号强度在[-126, 0]范围递增，频率为5G时[156, 200)递增
+    public byte[] mac = new byte[20];// MAC地址
+    public byte[] encryptMethod = new byte[256]; // 加密方式
+    public int speed;
 
-	public WifiSignal() {
-		super();
-	}
-	protected List<String> getFieldOrder() {
-		return Arrays.asList("ssid", "frequency","rssi","mac","speed");
-	}
+    public WifiSignal() {
+        super();
+    }
 
-	public static class ByReference extends WifiSignal implements Structure.ByReference {
-		
-	};
-	public static class ByValue extends WifiSignal implements Structure.ByValue {
-		
-	};
+    protected List<String> getFieldOrder() {
+        return Arrays.asList("ssid", "frequency", "rssi", "mac", "encryptMethod","speed");
+    }
+
+    public static class ByReference extends WifiSignal implements Structure.ByReference {
+
+    }
+
+    ;
+
+    public static class ByValue extends WifiSignal implements Structure.ByValue {
+
+    }
+
+    ;
 }
