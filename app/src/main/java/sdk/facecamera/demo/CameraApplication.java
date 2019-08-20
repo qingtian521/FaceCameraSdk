@@ -28,8 +28,8 @@ public class CameraApplication extends Application{
         mHandler = new Handler();
         mContext = getApplicationContext();
         mainThreadId = android.os.Process.myPid();
-        refWatcher = setupLeakCanary();
-        CrashHandler.getInstance().init(this,true);
+//        refWatcher = setupLeakCanary();
+//        CrashHandler.getInstance().init(this,true);
     }
 
     private RefWatcher setupLeakCanary(){

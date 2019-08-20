@@ -64,10 +64,12 @@ public class MainActivity extends BaseActivity {
 //           LogUtils.e("getFaceAngleEnable" + FaceSdk.getInstance().getFaceAngleEnable());
 //           FaceSdk.getInstance().writeCustomerAuthCode("testmyself");
            ;
-            NetInfoEx systemNetInfoEx = FaceSdk.getInstance().getNetInfo();
-            if (systemNetInfoEx!= null){
-                FaceSdk.getInstance().setNetInfo(systemNetInfoEx);
-            }
+//            FaceSdk.getInstance().getDeviceInfo();
+//            FaceSdk.getInstance().getWifiInfo();
+//            NetInfoEx systemNetInfoEx = FaceSdk.getInstance().getNetInfo();
+//            if (systemNetInfoEx!= null){
+//                FaceSdk.getInstance().setNetInfo(systemNetInfoEx);
+//            }
 
 //                    Toast.makeText(getApplicationContext(),"初始化成功",Toast.LENGTH_SHORT).show();
         }else {

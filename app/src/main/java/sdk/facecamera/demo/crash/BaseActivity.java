@@ -17,7 +17,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        RefWatcher refWatcher = CameraApplication.getRefWather(this);
-        refWatcher.watch(this);
+//        RefWatcher refWatcher = CameraApplication.getRefWather(this);
+//        refWatcher.watch(this);
     }
 }
