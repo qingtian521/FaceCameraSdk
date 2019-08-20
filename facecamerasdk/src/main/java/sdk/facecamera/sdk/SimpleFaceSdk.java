@@ -8,6 +8,7 @@ import java.nio.IntBuffer;
 import sdk.facecamera.sdk.pojos.DeviceModel;
 import sdk.facecamera.sdk.pojos.DeviceSystemInfo;
 import sdk.facecamera.sdk.pojos.NetInfoEx;
+import sdk.facecamera.sdk.pojos.WifiInfoModel;
 import sdk.facecamera.sdk.sdk.ComHaSdkLibrary;
 import sdk.facecamera.sdk.sdk.SystemNetInfoEx;
 import sdk.facecamera.sdk.sdk.SystemVersionInfo;
@@ -298,19 +299,25 @@ public class SimpleFaceSdk {
     /**
      * 获取wifi信息
      */
-    public void getWifiInfo(){
+    public WifiInfoModel getWifiInfo(){
         WifiSignal wifiSignal = new WifiSignal();
-        System.out.println("LogUtils HA_WifiInfor  start = ");
         int ret = ComHaSdkLibrary.INSTANCE.HA_WifiInfor(mCamera,wifiSignal);
         if (ret == 0){
             try {
-                String ssid = new String(wifiSignal.ssid,"UTF-8").trim();
-                System.out.println("LogUtils getWifiInfo ssid  = " + ssid);
+                WifiInfoModel wifiInfoModel = new WifiInfoModel();
+                wifiInfoModel.setSSID(new String(wifiSignal.ssid,"UTF-8").trim());
+                wifiInfoModel.setFrequency(wifiSignal.frequency);
+                wifiInfoModel.setRssi(wifiSignal.rssi);
+                wifiInfoModel.setMac(new String(wifiSignal.mac,"UTF-8").trim());
+                wifiInfoModel.setEncryptMethod(new String(wifiSignal.encryptMethod,"UTF-8").trim());
+                wifiInfoModel.setSpeed(wifiSignal.speed);
+                return wifiInfoModel;
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
         }
         System.out.println("LogUtils getWifiInfo  ret = " + ret);
+        return null;
     }
 
     /**
