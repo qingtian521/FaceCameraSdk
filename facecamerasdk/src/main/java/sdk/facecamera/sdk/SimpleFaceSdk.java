@@ -5,12 +5,14 @@ import android.util.Log;
 import java.io.UnsupportedEncodingException;
 import java.nio.IntBuffer;
 
+import sdk.facecamera.sdk.pojos.DeviceModel;
 import sdk.facecamera.sdk.pojos.DeviceSystemInfo;
 import sdk.facecamera.sdk.pojos.NetInfoEx;
 import sdk.facecamera.sdk.sdk.ComHaSdkLibrary;
 import sdk.facecamera.sdk.sdk.SystemNetInfoEx;
 import sdk.facecamera.sdk.sdk.SystemVersionInfo;
 import sdk.facecamera.sdk.sdk.WifiSignal;
+import sdk.facecamera.sdk.sdk.ipscan_t;
 
 public class SimpleFaceSdk {
 
@@ -20,10 +22,6 @@ public class SimpleFaceSdk {
         try {
             System.loadLibrary("hasdk");
             System.loadLibrary("jnidispatch");
-            ComHaSdkLibrary.INSTANCE.HA_Init();
-            ComHaSdkLibrary.INSTANCE.HA_SetNotifyConnected(1);
-            ComHaSdkLibrary.INSTANCE.HA_InitFaceModel((String) null);
-            ComHaSdkLibrary.INSTANCE.HA_RegConnectEventCb(new HA_ConnectEventCb(), 0);
         } catch (Exception ex) {
             Log.e("none", "static initializer: ", ex);
         }
@@ -44,6 +42,9 @@ public class SimpleFaceSdk {
         SimpleFaceSdk.connectEvent = connectEvent;
     }
 
+    /**
+     * 全局方法，只需要注册一次
+     */
     public static class HA_ConnectEventCb implements ComHaSdkLibrary.HA_ConnectEventCb_t {
 
         @Override
@@ -72,14 +73,21 @@ public class SimpleFaceSdk {
         return mSimpleFaceSdk;
     }
 
+    public void init(){
+        ComHaSdkLibrary.INSTANCE.HA_Init();
+        ComHaSdkLibrary.INSTANCE.HA_SetNotifyConnected(1);
+        ComHaSdkLibrary.INSTANCE.HA_InitFaceModel((String) null);
+        ComHaSdkLibrary.INSTANCE.HA_RegConnectEventCb(new HA_ConnectEventCb(), 0);
+    }
+
     /**
      * 初始化相机连接
      * @param ip 相机ip
      * @return 结果
      */
-    public boolean initialize(String ip){
+    public boolean connect(String ip){
         IntBuffer connectErrorNum = IntBuffer.allocate(1);
-        mCamera = ComHaSdkLibrary.INSTANCE.HA_ConnectEx(ip, (short) 9527, null, null, connectErrorNum, 0, 0);
+        mCamera = ComHaSdkLibrary.INSTANCE.HA_ConnectEx(ip, (short) 9527, null, null, connectErrorNum, 0, 1);
         int errorNum = connectErrorNum.get();
         if (mCamera == null || ComHaSdkLibrary.INSTANCE.HA_Connected(mCamera) != 1) {
             Log.e(TAG, "初始化失败，Initialize, faild: errorCode: " + errorNum);
@@ -88,12 +96,62 @@ public class SimpleFaceSdk {
         return true;
     }
 
+    public void disConnect(){
+        ComHaSdkLibrary.INSTANCE.HA_DisConnect(mCamera);
+    }
+
     public void unInitialize() {
         if (mCamera != null) {
             ComHaSdkLibrary.INSTANCE.HA_ClearAllCallbacks(mCamera);
             ComHaSdkLibrary.INSTANCE.HA_DisConnect(mCamera);
         }
     }
+
+    /**
+     * 注册设备搜索回调函数
+     */
+
+    public static void setSearchListener(OnSearchListener listener) {
+        ComHaSdkLibrary.INSTANCE.HA_RegDiscoverIpscanCb(new HA_SearchDeviceCb(), 0);
+        searchListener = listener;
+    }
+
+    private static OnSearchListener searchListener = null;
+
+    public interface OnSearchListener {
+        void onSearchResult(DeviceModel model);
+    }
+
+    /**
+     * 触发搜索
+     */
+    public static void searchDevice() {
+        ComHaSdkLibrary.INSTANCE.HA_DiscoverIpscan();
+    }
+
+    //搜索结果回调在这里面
+    private static class HA_SearchDeviceCb implements ComHaSdkLibrary.discover_ipscan_cb_t {
+
+        @Override
+        public void apply(ipscan_t ipscan, int usr_param) {
+            DeviceModel model = new DeviceModel();
+            try {
+                model.setDeviceMac(new String(ipscan.mac, "UTF-8").trim());
+                model.setDeviceIp(new String(ipscan.ip, "UTF-8").trim());
+                model.setNetMask(new String(ipscan.netmask, "UTF-8").trim());
+                model.setManuFacturer(new String(ipscan.manufacturer, "UTF-8").trim());
+                model.setPlatform(new String(ipscan.platform, "UTF-8").trim());
+                model.setSystem(new String(ipscan.system, "UTF-8").trim());
+                model.setVersion(new String(ipscan.version, "UTF-8").trim());
+                if (searchListener != null) {
+                    searchListener.onSearchResult(model);
+                }
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     /**
      * 获取相机的网络参数
@@ -226,7 +284,16 @@ public class SimpleFaceSdk {
     public void getWifiInfo(){
         WifiSignal wifiSignal = new WifiSignal();
         int ret = ComHaSdkLibrary.INSTANCE.HA_WifiInfor(mCamera,wifiSignal);
-        System.out.println("getWifiInfo 11111111111111111111111111111 ret = " + ret);
+        if (ret == 0){
+            try {
+                String ssid = new String(wifiSignal.ssid,"UTF-8").trim();
+                System.out.println("LogUtils getWifiInfo ssid  = " + ssid);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("LogUtils getWifiInfo  ret = " + ret);
     }
 
     /**
