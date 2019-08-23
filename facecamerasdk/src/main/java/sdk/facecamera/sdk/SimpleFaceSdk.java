@@ -146,8 +146,16 @@ public class SimpleFaceSdk {
     /**
      * 注册设备搜索
      */
+
+    private HA_SearchDeviceCb searchDeviceCb;
+
     public void registerSearchDevice(){
-        ComHaSdkLibrary.INSTANCE.HA_RegDiscoverIpscanCb(new HA_SearchDeviceCb(), 0);
+        if (searchDeviceCb == null){
+            searchDeviceCb = new HA_SearchDeviceCb();
+            ComHaSdkLibrary.INSTANCE.HA_RegDiscoverIpscanCb(searchDeviceCb, 0);
+        }else {
+            ComHaSdkLibrary.INSTANCE.HA_RegDiscoverIpscanCb(searchDeviceCb, 0);
+        }
     }
 
     /**
