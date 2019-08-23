@@ -26,7 +26,6 @@ public class SimpleFaceSdk {
             ComHaSdkLibrary.INSTANCE.HA_Init();
             ComHaSdkLibrary.INSTANCE.HA_SetNotifyConnected(1);
             ComHaSdkLibrary.INSTANCE.HA_InitFaceModel((String) null);
-            ComHaSdkLibrary.INSTANCE.HA_RegConnectEventCb(new HA_ConnectEventCb(), 0);
         } catch (Exception ex) {
             Log.e("none", "static initializer: ", ex);
         }
@@ -35,21 +34,32 @@ public class SimpleFaceSdk {
     //相机句柄
     private ComHaSdkLibrary.HA_Cam mCamera;
 
-    private static ConnectEvent connectEvent = null;
+    private ConnectEvent connectEvent = null;
 
     public interface ConnectEvent{
         void onConnect(String ip,short port,int usrParam);
         void onDisConnect(String ip,short port,int usrParam);
     }
 
-    public static void setConnectEvent(ConnectEvent connectEvent){
-        SimpleFaceSdk.connectEvent = connectEvent;
+    /**
+     * 注册连接事件
+     */
+    public void registerConnectEvent(){
+        ComHaSdkLibrary.INSTANCE.HA_RegConnectEventCb(new HA_ConnectEventCb(), 0);
     }
 
     /**
-     * 全局方法，只需要注册一次
+     * 连接事件回调
+     * @param connectEvent connectEvent
      */
-    public static class HA_ConnectEventCb implements ComHaSdkLibrary.HA_ConnectEventCb_t {
+    public void setConnectEvent(ConnectEvent connectEvent){
+        this.connectEvent = connectEvent;
+    }
+
+    /**
+     * 只需要注册一次
+     */
+    public class HA_ConnectEventCb implements ComHaSdkLibrary.HA_ConnectEventCb_t {
 
         @Override
         public void apply(ComHaSdkLibrary.HA_Cam cam, String ip, short port, int event, int usrParam) {
@@ -125,20 +135,29 @@ public class SimpleFaceSdk {
         }
     }
 
-    /**
-     * 注册设备搜索回调函数
-     */
 
-    public static void setSearchListener(OnSearchListener listener) {
-        ComHaSdkLibrary.INSTANCE.HA_RegDiscoverIpscanCb(new HA_SearchDeviceCb(), 0);
-        searchListener = listener;
-    }
-
-    private static OnSearchListener searchListener = null;
+    private OnSearchListener searchListener = null;
 
     public interface OnSearchListener {
         void onSearchResult(DeviceModel model);
     }
+
+
+    /**
+     * 注册设备搜索
+     */
+    public void registerSearchDevice(){
+        ComHaSdkLibrary.INSTANCE.HA_RegDiscoverIpscanCb(new HA_SearchDeviceCb(), 0);
+    }
+
+    /**
+     * 设备搜索回调函数
+     * @param listener OnSearchListener
+     */
+    public  void setSearchListener(OnSearchListener listener) {
+        this.searchListener = listener;
+    }
+
 
     /**
      * 触发搜索
@@ -148,7 +167,7 @@ public class SimpleFaceSdk {
     }
 
     //搜索结果回调在这里面
-    private static class HA_SearchDeviceCb implements ComHaSdkLibrary.discover_ipscan_cb_t {
+    private class HA_SearchDeviceCb implements ComHaSdkLibrary.discover_ipscan_cb_t {
 
         @Override
         public void apply(ipscan_t ipscan, int usr_param) {

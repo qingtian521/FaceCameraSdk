@@ -1,9 +1,7 @@
 package sdk.facecamera.demo;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,10 +9,10 @@ import android.widget.TextView;
 
 import sdk.facecamera.demo.crash.BaseActivity;
 import sdk.facecamera.demo.util.LogUtils;
-import sdk.facecamera.sdk.FaceSdk;
 import sdk.facecamera.sdk.SimpleFaceSdk;
 import sdk.facecamera.sdk.pojos.DeviceModel;
 import sdk.facecamera.sdk.pojos.NetInfoEx;
+import sdk.facecamera.sdk.pojos.WifiInfoModel;
 
 public class SplashActivity extends BaseActivity {
 
@@ -48,7 +46,7 @@ public class SplashActivity extends BaseActivity {
             }
         });
 
-        SimpleFaceSdk.setSearchListener(new SimpleFaceSdk.OnSearchListener() {
+        SimpleFaceSdk.getInstance().setSearchListener(new SimpleFaceSdk.OnSearchListener() {
             @Override
             public void onSearchResult(DeviceModel model) {
                 LogUtils.i("setDeviceIp  = " + model.getDeviceIp());
@@ -62,7 +60,9 @@ public class SplashActivity extends BaseActivity {
             }
         });
 
-        SimpleFaceSdk.setConnectEvent(new SimpleFaceSdk.ConnectEvent() {
+        SimpleFaceSdk.getInstance().registerConnectEvent();
+        SimpleFaceSdk.getInstance().registerSearchDevice();
+        SimpleFaceSdk.getInstance().setConnectEvent(new SimpleFaceSdk.ConnectEvent() {
             @Override
             public void onConnect(String ip, short port, int usrParam) {
                 LogUtils.i("onConnect ");
@@ -74,22 +74,19 @@ public class SplashActivity extends BaseActivity {
             }
         });
 
-//       boolean ret =  SimpleFaceSdk.getInstance().connect("192.168.0.102");
-//        LogUtils.i("initialize ret = " + ret);
-//
-//       new Thread(new Runnable() {
-//           @Override
-//           public void run() {
-//               for (int i = 0;i<100;i++){
-//                   String deviceid = SimpleFaceSdk.getInstance().getDeviceId();
-//                   LogUtils.i("deviceid = " + deviceid);
-//                   SimpleFaceSdk.getInstance().getWifiInfo();
-//                   NetInfoEx netInfoEx = SimpleFaceSdk.getInstance().getNetInfo();
-//                   LogUtils.i("NetInfoEx = ip = " + netInfoEx.getIp());
-//                   LogUtils.i("------------------- i=" + i);
-//               }
-//           }
-//       }).start();
+       boolean ret =  SimpleFaceSdk.getInstance().connect("192.168.0.102");
+        LogUtils.i("initialize ret = " + ret);
+
+       new Thread(new Runnable() {
+           @Override
+           public void run() {
+                   String deviceid = SimpleFaceSdk.getInstance().getDeviceId();
+                   LogUtils.i("deviceid = " + deviceid);
+                   WifiInfoModel wifiInfoModel = SimpleFaceSdk.getInstance().getWifiInfo();
+                   NetInfoEx netInfoEx = SimpleFaceSdk.getInstance().getNetInfo();
+                   LogUtils.i("NetInfoEx = ip = " + netInfoEx.getIp());
+           }
+       }).start();
     }
 
     @Override
